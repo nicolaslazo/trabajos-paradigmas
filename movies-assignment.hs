@@ -11,11 +11,11 @@ califs (_, puntajes) = puntajes
 
 -- Funciones auxiliares
 promedio :: [Int] -> Int
-promedio numeros = sum numeros / length numeros
+promedio numeros = div (sum numeros) (length numeros)
 
 aumentarPuntaje :: Int -> Int
 aumentarPuntaje 1 = 1
-aumentarPuntaje num = min 10 num+2
+aumentarPuntaje num = min 10 (num+2)
 
 unaPeliYPuntaje :: Peli -> (String, Int)
 unaPeliYPuntaje pelicula = (titulo pelicula, puntaje pelicula)
@@ -44,7 +44,7 @@ valeLaPena :: Maraton -> Bool
 valeLaPena bingeWatch = (estaBuena.head) bingeWatch && (estaBuena.last) bingeWatch
 
 pertenece :: String -> Maraton -> Bool
-pertenece nombre = ((>1).length.(filter (==nombre)).(map titulo))
+pertenece nombre = ((>=1).length.(filter (==nombre)).(map titulo))
 
 valoracion :: Maraton -> Int
 valoracion = promedio.(map puntaje)
