@@ -3,8 +3,8 @@ data Auto = Auto {
 	nombre :: String,
 	nivelDeNafta :: Int,
 	velocidad :: Int,
-	nombreDeEnamorado :: String,
-	trucoParticular :: 
+	nombreDeEnamorado :: String
+	-- trucoParticular :: 
 } deriving Show
 
 --	 INCISO 2	--
@@ -22,8 +22,8 @@ velocidadDeTurbo nDeVocales
 	|	nDeVocales > 4 = 40
 
 incrementarVelocidad :: Auto -> Auto
-incrementarVelocidad auto = {	nombre,
-				nivelDeNafta,
-				velocidad + ((velocidadDeTurbo.cantDeVocales) nombreDeEnamorado),
-				trucoParticular
+incrementarVelocidad auto = Auto {	nombre = nombre auto,
+					nivelDeNafta = nivelDeNafta,
+					velocidad = velocidad + ((velocidadDeTurbo.cantDeVocales) nombreDeEnamorado),
+					trucoParticular = trucoParticular
 }
