@@ -1,5 +1,3 @@
-
-{-# LANGUAGE NoMonomorphismRestriction #-}
 import Text.Show.Functions -- Para mostrar <Function> en consola cada vez que devuelven una
 import Data.List -- Para métodos de colecciones que no vienen por defecto (ver guía de lenguajes)
 import Data.Maybe -- Por si llegan a usar un método de colección que devuelva “Just suElemento” o “Nothing”.
@@ -66,7 +64,7 @@ velocidadDeTurbo nDeVocales
 	|	(nDeVocales>=1) && (nDeVocales<=2) = 15
 	|	(nDeVocales>=3) && (nDeVocales<=4) = 20
 	|	nDeVocales > 4 = 30
-	| otherwise = 0
+	|	otherwise = 0
 
 -- Punto 3 --
 puedeRealizarUnTruco :: Auto -> Bool
