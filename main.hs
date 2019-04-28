@@ -31,7 +31,7 @@ impresionar  = incrementarVelocidadSegun velocidad
 incrementarVelocidadSegun :: Criterio -> Auto -> Auto
 incrementarVelocidadSegun criterio auto = nuevaVelocidad (criterio auto) auto
 
-incrementarVelocidadPorEnamode = incrementarVelocidadSegun (velocidadDeTurbo.cantDeVocales.nombreDeEnamorado)
+incrementarVelocidadPorEnamorade = incrementarVelocidadSegun (velocidadDeTurbo.cantDeVocales.nombreDeEnamorado)
 
 nuevaVelocidad :: Velocidad -> Auto -> Auto
 nuevaVelocidad unaVelocidadAdicional unAuto = unAuto {velocidad = velocidad unAuto + unaVelocidadAdicional}
