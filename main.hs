@@ -7,7 +7,7 @@ import Data.Maybe -- Por si llegan a usar un método de colección que devuelva 
 type Velocidad = Int
 type Nafta = Float
 type Truco = Auto -> Auto
-type Criterio = Auto -> Int
+type Criterio = Auto -> Float
 type Metros = Float
 
 data Auto = Auto {
@@ -15,7 +15,7 @@ data Auto = Auto {
 	nivelDeNafta :: Nafta,
 	velocidad :: Velocidad,
 	nombreDeEnamorado :: String,
-  trucoParticular :: Truco
+	trucoParticular :: Truco
 } deriving Show
 
 --2)
@@ -31,6 +31,7 @@ impresionar  = incrementarVelocidadSegun velocidad
 incrementarVelocidadSegun :: Criterio -> Auto -> Auto
 incrementarVelocidadSegun criterio auto = nuevaVelocidad (criterio auto) auto
 
+incrementarVelocidadPorEnamorade :: Truco
 incrementarVelocidadPorEnamorade = incrementarVelocidadSegun (velocidadDeTurbo.cantDeVocales.nombreDeEnamorado)
 
 nuevaVelocidad :: Velocidad -> Auto -> Auto
@@ -71,3 +72,15 @@ puedeRealizarUnTruco :: Auto -> Bool
 puedeRealizarUnTruco auto = (nivelDeNafta auto) > 0 && (velocidad auto) < 100
 
 -- Punto 4 --
+
+comboLoco :: Truco
+comboLoco =  (deReversa 1000).nitro
+
+queTrucazo :: String -> Truco
+queTrucazo enamorado = incrementarVelocidadPorEnamorade.(elijeOtreEnamorade enamorado)
+
+turbo :: Truco
+turbo unAuto = (vaciarTanqueDeNafta.(nuevaVelocidad((nivelDeNafta unAuto) * 10))) unAuto
+
+vaciarTanqueDeNafta :: Auto -> Auto
+vaciarTanqueDeNafta unAuto = unAuto {nivelDeNafta = 0}
