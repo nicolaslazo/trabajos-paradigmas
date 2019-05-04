@@ -4,7 +4,7 @@ import Data.Maybe -- Por si llegan a usar un método de colección que devuelva 
 
 --	Punto 1	--
 -- 1)
-type Velocidad = Int
+type Velocidad = Float
 type Nafta = Float
 type Truco = Auto -> Auto
 type Criterio = Auto -> Float
