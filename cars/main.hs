@@ -11,34 +11,34 @@ type Criterio = Auto -> Float
 type Metros = Float
 
 data Auto = Auto {
-	nombre :: String,
-	nivelDeNafta :: Nafta,
-	velocidad :: Velocidad,
-	nombreDeEnamorado :: String,
-	trucoParticular :: Truco
+    nombre :: String,
+    nivelDeNafta :: Nafta,
+    velocidad :: Velocidad,
+    nombreDeEnamorado :: String,
+    trucoParticular :: Truco
 } deriving Show
 
 --2)
 deReversa :: Metros -> Truco
-deReversa metrosPista = nuevaNafta (metrosPista * 0.2)
+deReversa = aumentarNafta.(*0.2)
 
-nuevaNafta :: Nafta -> Auto -> Auto
-nuevaNafta cantidadNafta unAuto = unAuto {nivelDeNafta = nivelDeNafta unAuto + cantidadNafta}
+aumentarNafta :: Nafta -> Auto -> Auto
+aumentarNafta cantidadNafta unAuto = unAuto {nivelDeNafta = nivelDeNafta unAuto + cantidadNafta}
 
 impresionar :: Truco
 impresionar  = incrementarVelocidadSegun velocidad
 
 incrementarVelocidadSegun :: Criterio -> Auto -> Auto
-incrementarVelocidadSegun criterio auto = nuevaVelocidad (criterio auto) auto
+incrementarVelocidadSegun criterio auto = aumentarVelocidad (criterio auto) auto
 
 incrementarVelocidadPorEnamorade :: Truco
 incrementarVelocidadPorEnamorade = incrementarVelocidadSegun (velocidadDeTurbo.cantDeVocales.nombreDeEnamorado)
 
-nuevaVelocidad :: Velocidad -> Auto -> Auto
-nuevaVelocidad unaVelocidadAdicional unAuto = unAuto {velocidad = velocidad unAuto + unaVelocidadAdicional}
+aumentarVelocidad :: Velocidad -> Auto -> Auto
+aumentarVelocidad unaVelocidadAdicional unAuto = unAuto {velocidad = velocidad unAuto + unaVelocidadAdicional}
 
 nitro :: Truco
-nitro = nuevaVelocidad 15
+nitro = aumentarVelocidad 15
 
 fingirAmor :: String -> Truco
 fingirAmor nombreEnamorade = elijeOtreEnamorade nombreEnamorade
@@ -62,14 +62,20 @@ cantDeVocales = (length.(filter (esVocal)))
 
 velocidadDeTurbo :: Int -> Velocidad
 velocidadDeTurbo nDeVocales
-	|	(nDeVocales>=1) && (nDeVocales<=2) = 15
-	|	(nDeVocales>=3) && (nDeVocales<=4) = 20
-	|	nDeVocales > 4 = 30
-	|	otherwise = 0
+    |    (nDeVocales>=1) && (nDeVocales<=2) = 15
+    |    (nDeVocales>=3) && (nDeVocales<=4) = 20
+    |    nDeVocales > 4 = 30
+    |    otherwise = 0
 
 -- Punto 3 --
+tieneNafta :: Auto -> Bool
+tieneNafta = (>0).nivelDeNafta
+
+velocidadEsMenorACien :: Auto -> Bool
+velocidadEsMenorACien = (<100).velocidad
+
 puedeRealizarUnTruco :: Auto -> Bool
-puedeRealizarUnTruco auto = (nivelDeNafta auto) > 0 && (velocidad auto) < 100
+puedeRealizarUnTruco auto = (tieneNafta auto) && (velocidadEsMenorACien auto)
 
 -- Punto 4 --
 
@@ -80,7 +86,7 @@ queTrucazo :: String -> Truco
 queTrucazo enamorado = incrementarVelocidadPorEnamorade.(elijeOtreEnamorade enamorado)
 
 turbo :: Truco
-turbo unAuto = (vaciarTanqueDeNafta.(nuevaVelocidad((nivelDeNafta unAuto) * 10))) unAuto
+turbo = (vaciarTanqueDeNafta.(incrementarVelocidadSegun ((*10).nivelDeNafta)))
 
 vaciarTanqueDeNafta :: Auto -> Auto
-vaciarTanqueDeNafta unAuto = unAuto {nivelDeNafta = 0}
+vaciarTanqueDeNafta unAuto = unAuto {nivelDeNafta = 0.0}
