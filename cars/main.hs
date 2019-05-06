@@ -1,6 +1,4 @@
 import Text.Show.Functions -- Para mostrar <Function> en consola cada vez que devuelven una
-import Data.List -- Para métodos de colecciones que no vienen por defecto (ver guía de lenguajes)
-import Data.Maybe -- Por si llegan a usar un método de colección que devuelva “Just suElemento” o “Nothing”.
 
 --	Punto 1	--
 -- 1)
@@ -58,13 +56,13 @@ esVocal :: Char -> Bool
 esVocal = flip elem "aeiou"
 
 cantDeVocales :: String -> Int
-cantDeVocales = (length.(filter (esVocal)))
+cantDeVocales = length.filter esVocal
 
 velocidadDeTurbo :: Int -> Velocidad
 velocidadDeTurbo nDeVocales
-    |    (nDeVocales>=1) && (nDeVocales<=2) = 15
-    |    (nDeVocales>=3) && (nDeVocales<=4) = 20
     |    nDeVocales > 4 = 30
+    |    nDeVocales > 3 = 20
+    |    nDeVocales > 1 = 15
     |    otherwise = 0
 
 -- Punto 3 --
@@ -80,10 +78,10 @@ puedeRealizarUnTruco auto = (tieneNafta auto) && (velocidadEsMenorACien auto)
 -- Punto 4 --
 
 comboLoco :: Truco
-comboLoco =  (deReversa 1000).nitro
+comboLoco =  deReversa 1000.nitro
 
 queTrucazo :: String -> Truco
-queTrucazo enamorado = incrementarVelocidadPorEnamorade.(elijeOtreEnamorade enamorado)
+queTrucazo enamorado = incrementarVelocidadPorEnamorade.elijeOtreEnamorade enamorado
 
 turbo :: Truco
 turbo = (vaciarTanqueDeNafta.(incrementarVelocidadSegun ((*10).nivelDeNafta)))
