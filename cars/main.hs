@@ -60,9 +60,9 @@ cantDeVocales = length.filter esVocal
 
 velocidadDeTurbo :: Int -> Velocidad
 velocidadDeTurbo nDeVocales
-    |    nDeVocales > 4 = 30
-    |    nDeVocales > 3 = 20
-    |    nDeVocales > 1 = 15
+    |    nDeVocales >  4 = 30
+    |    nDeVocales >= 3 = 20
+    |    nDeVocales >= 1 = 15
     |    otherwise = 0
 
 -- Punto 3 --
