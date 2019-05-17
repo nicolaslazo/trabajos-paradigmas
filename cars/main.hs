@@ -37,7 +37,7 @@ data Carrera = Carrera {
 --deReversa :: Velocidad -> Truco
 --deReversa = aumentarNafta.(*0.2) en realidad solo cambiaria el tipo
 
---potreroFunes = Carrera 3 5 [RochaMcQueen,biankerr,gushtav,rodra] ["Ronco", "Tinch", "Dodain"] sacarAlPistero
+--potreroFunes = Carrera 3 5 [rochaMcQueen,biankerr,gushtav,rodra] ["Ronco", "Tinch", "Dodain"] sacarAlPistero
 
 --3.2)
 
