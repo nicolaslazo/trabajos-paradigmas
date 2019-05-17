@@ -7,10 +7,10 @@ import Data.Maybe -- Por si llegan a usar un método de colección que devuelva 
 
 --	INCISO 1	--
 
-type Velocidad = Int
+type Velocidad = Float
 type Nafta = Float
 type Truco = Auto -> Auto
-type Criterio = Auto -> Int
+type Criterio = Auto -> Float
 type Metros = Float
 type Kilometros = Float
 type Trampa = Carrera -> Carrera
