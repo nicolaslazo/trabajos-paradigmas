@@ -90,39 +90,67 @@ participantesPodio  = (take 3 . participantes)
 
 --3.3)
 
-sufrirTrampa :: Carrera -> Carrera
-sufrirTrampa unaCarrera = (trampa unaCarrera) unaCarrera
+participantesSufrirTrampa :: Carrera -> Carrera
+participantesSufrirTrampa unaCarrera = (trampa unaCarrera) unaCarrera
+
+participantesEnamoradesLuegoDeHacerTruco ::  Carrera ->  Carrera
+participantesEnamoradesLuegoDeHacerTruco  = cambiarParticipantesSegun participantesConEnamoradeEnPublico
+
+participantesGastarCombustibleVuelta :: Carrera -> Carrera
+participantesGastarCombustibleVuelta = cambiarParticipantesSegun combustibleLuegoDeVuelta
+
+darVuelta :: Carrera -> Carrera
+darVuelta = restarVuelta.participantesLuegoDeUnaVuelta
+
+participantesLuegoDeUnaVuelta ::  Carrera -> Carrera
+participantesLuegoDeUnaVuelta = (participantesSufrirTrampa.participantesEnamoradesLuegoDeHacerTruco.participantesGastarCombustibleVuelta)
+
+correrCarrera :: Carrera -> Carrera
+correrCarrera unaCarrera
+    | (vueltas unaCarrera) >= 1 = darVuelta unaCarrera
+    | otherwise = id unaCarrera
 
 
-realizanTruco :: Carrera -> Carrera
-realizanTruco = cambiarParticipantesSegun participantesLuegoDeHacerTruco
-participantesLuegoDeHacerTruco ::  Carrera ->  [Auto]
-participantesLuegoDeHacerTruco  = afectarParticipantes realizarTruco
+
+--Funciones Auxiliares 3.3
+
+participantesConEnamoradeEnPublico ::  Carrera -> [Auto]
+participantesConEnamoradeEnPublico unaCarrera = afectarParticipantes (loVenSusEnamorades unaCarrera) unaCarrera
+
+loVenSusEnamorades ::  Carrera -> Auto -> Auto
+loVenSusEnamorades unaCarrera unAuto
+      |  puedeRealizarManiobraEnamorado unaCarrera unAuto = realizarTruco unAuto
+      |  otherwise = id unAuto
+
+enamoradeEstaEnElPublico ::  Carrera -> Auto -> Bool
+enamoradeEstaEnElPublico unaCarrera unAuto = any ( coincidenNombres (nombreDeEnamorado unAuto)) (nombresPublico unaCarrera)
+
+puedeRealizarManiobraEnamorado ::  Carrera -> Auto -> Bool
+puedeRealizarManiobraEnamorado unaCarrera unAuto = (enamoradeEstaEnElPublico unaCarrera unAuto) && (puedeRealizarUnTruco unAuto)
+
+coincidenNombres ::  String -> String -> Bool
+coincidenNombres unNombre  =  (==) unNombre
+
 realizarTruco :: Auto -> Auto
 realizarTruco unAuto = (trucoParticular unAuto) unAuto
 
--- maniobraEnamorado = creo que habria que hacer guardas para aplicar por auto,
--- porque si filtro la lista a los que puedan debolveria una lista diferente a la original
+combustibleLuegoDeVuelta :: Carrera -> [Auto]
+combustibleLuegoDeVuelta unaCarrera = afectarParticipantes (gastarNaftaSegun (calcularCombustibleVuelta unaCarrera) ) unaCarrera
 
---losVenSusEnamorades unaCarrera = seleccionarParticipantes (enamoradeEstaEnElPublico unaCarrera)
---enamoradeEstaEnElPublico unaCarrera unAuto = any ((==).nombreDeEnamorado unAuto) (publico unaCarrera)
---puedenRealizarUnTruco = seleccionarParticipantes puedeRealizarUnTruco
+gastarNaftaSegun :: (Auto -> Nafta) -> Auto -> Auto
+gastarNaftaSegun criterio unAuto = gastarNafta (criterio unAuto) unAuto
 
+gastarNafta :: Nafta -> Auto -> Auto
+gastarNafta cantidadNafta unAuto = unAuto {nivelDeNafta = nivelDeNafta unAuto - cantidadNafta}
 
---seleccionarParticipantes :: (Auto -> Bool) ->  [Auto] -> [Auto]
---seleccionarParticipantes criterio unaCarrera = filter criterio (participantes una Carrera)
-
-
---participantesLuegoDeUnaVuelta unaCarrera = afectarParticipantes (sufrirTrampa.maniobraEnamorado.combustibleLuegoDeVuelta unaCarrera)
---combustibleLuegoDeVuelta unaCarrera =  (cambiarNafta.(*(-1)).calcularCombustibleVuelta unaCarrera)
---calcularCombustibleVuelta unaCarrera unAuto = div (longitudPista unaPista) ((*10).velocidad)
-
-
---darVuelta :: Carrera -> Carrera
---darVuelta unaCarrera = cambiarParticipantesSegun participantesLuegoDeUnaVuelta
+restarVuelta :: Carrera ->  Carrera
+restarVuelta unaCarrera  = unaCarrera {vueltas = (vueltas unaCarrera) - 1}
 
 cambiarNafta :: Nafta -> Auto -> Auto
 cambiarNafta cantidadNafta unAuto = unAuto {nivelDeNafta = nivelDeNafta unAuto + cantidadNafta}
+
+calcularCombustibleVuelta :: Carrera -> Auto -> Nafta
+calcularCombustibleVuelta unaCarrera unAuto = (longitudPista unaCarrera) / ( (*10) (velocidad unAuto))
 
 impresionar :: Truco
 impresionar  = incrementarVelocidadSegun velocidad
@@ -134,7 +162,7 @@ incrementarVelocidadPorEnamorade :: Truco
 incrementarVelocidadPorEnamorade = incrementarVelocidadSegun (velocidadDeTurbo.cantDeVocales.nombreDeEnamorado)
 
 nitro :: Truco
-nitro = cambiarVelocidad 15
+nitro = cambiarVelocidad  15
 
 fingirAmor :: String -> Truco
 fingirAmor nombreEnamorade = elijeOtreEnamorade nombreEnamorade
