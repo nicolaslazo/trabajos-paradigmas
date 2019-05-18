@@ -16,21 +16,21 @@ type Kilometros = Float
 type Trampa = Carrera -> Carrera
 
 data Auto = Auto {
-	nombre :: String,
-	nivelDeNafta :: Nafta,
-	velocidad :: Velocidad,
-	nombreDeEnamorado :: String,
+    nombre :: String,
+    nivelDeNafta :: Nafta,
+    velocidad :: Velocidad,
+    nombreDeEnamorado :: String,
   trucoParticular :: Truco
 } deriving Show
 
 --3.1)
 
 data Carrera = Carrera {
-	vueltas :: Int,
-	longitudPista :: Kilometros,
-	participantes :: [Auto],
-	nombresPublico :: [String],
-  trampa :: Trampa
+    vueltas :: Int,
+    longitudPista :: Kilometros,
+    participantes :: [Auto],
+    nombresPublico :: [String],
+    trampa :: Trampa
 } deriving Show
 
 --2)
@@ -41,30 +41,30 @@ data Carrera = Carrera {
 
 --3.2)
 
-nuevosParticipantes :: (Carrera -> [Auto]) -> Carrera -> Carrera
-nuevosParticipantes criterio unaCarrera = cambiarParticipantes unaCarrera (criterio unaCarrera)
+cambiarParticipantesSegun :: (Carrera -> [Auto]) -> Carrera -> Carrera
+cambiarParticipantesSegun criterio unaCarrera = cambiarParticipantes unaCarrera (criterio unaCarrera)
 
 --Para afectar a los participantes conviene pasarle la carrera y obtener los participantes o directamente pasarle los participantes??
 afectarParticipantes :: (Auto -> Auto) -> Carrera -> [Auto]
 afectarParticipantes criterio unaCarrera = map criterio (participantes unaCarrera)
 
 --seleccionarParticipantes :: (Auto -> Bool) ->  [Auto] -> [Auto]
---seleccionarParticipantes criterio unaCarrera = filter criterio (participantes unaCarrera)
+--seleccionarParticipantes criterio unaCarrera = filter criterio (participantes una Carrera)
 
 sacarAlPistero :: Trampa
-sacarAlPistero = nuevosParticipantes sacarPrimerParticipante
+sacarAlPistero = cambiarParticipantesSegun (tail.participantes)
 
 lluvia :: Trampa
-lluvia = nuevosParticipantes participantesDuranteLluvia
+lluvia = cambiarParticipantesSegun participantesDuranteLluvia
 
 neutralizarTrucos :: Trampa
-neutralizarTrucos  = nuevosParticipantes participantesNeutralizados
+neutralizarTrucos  = cambiarParticipantesSegun participantesNeutralizados
 
 pocaReserva :: Trampa
-pocaReserva  = nuevosParticipantes sacarParticipantesConPocaReserva
+pocaReserva  = cambiarParticipantesSegun sacarParticipantesConPocaReserva
 
 podio :: Trampa
-podio  = nuevosParticipantes participantesPodio
+podio  = cambiarParticipantesSegun participantesPodio
 
 --Funciones Auxiliares para trampas
 
@@ -80,11 +80,8 @@ sacarParticipantesConPocaReserva unaCarrera  = filter (not.tienePocaReserva) (pa
 participantesPodio :: Carrera -> [Auto]
 participantesPodio  = (take 3 . participantes)
 
-sacarPrimerParticipante :: Carrera -> [Auto]
-sacarPrimerParticipante  = (tail.participantes)
-
 tienePocaReserva :: Auto -> Bool
-tienePocaReserva  =  (naftaMenorAX 30)
+tienePocaReserva  =  (esNaftaMenorA 30)
 
 --3.3)
 
@@ -93,7 +90,7 @@ sufrirTrampa unaCarrera = (trampa unaCarrera) unaCarrera
 
 
 realizanTruco :: Carrera -> Carrera
-realizanTruco = nuevosParticipantes participantesLuegoDeHacerTruco
+realizanTruco = cambiarParticipantesSegun participantesLuegoDeHacerTruco
 participantesLuegoDeHacerTruco ::  Carrera ->  [Auto]
 participantesLuegoDeHacerTruco  = afectarParticipantes realizarTruco
 realizarTruco :: Auto -> Auto
@@ -112,7 +109,7 @@ realizarTruco unAuto = (trucoParticular unAuto) unAuto
 
 
 --darVuelta :: Carrera -> Carrera
---darVuelta unaCarrera = nuevosParticipantes participantesLuegoDeUnaVuelta
+--darVuelta unaCarrera = cambiarParticipantesSegun participantesLuegoDeUnaVuelta
 
 cambiarParticipantes :: Carrera ->  [Auto] -> Carrera
 cambiarParticipantes unaCarrera unosParticipantes = unaCarrera {participantes = unosParticipantes}
@@ -179,8 +176,8 @@ velocidadDeTurbo nDeVocales
 tieneNafta :: Auto -> Bool
 tieneNafta = (>0).nivelDeNafta
 
-naftaMenorAX :: Nafta ->  Auto -> Bool
-naftaMenorAX unaNafta = (<unaNafta).nivelDeNafta
+esNaftaMenorA :: Nafta ->  Auto -> Bool
+esNaftaMenorA unaNafta = (<unaNafta).nivelDeNafta
 
 velocidadEsMenorACien :: Auto -> Bool
 velocidadEsMenorACien = (<100).velocidad
