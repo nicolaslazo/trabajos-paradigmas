@@ -1,16 +1,14 @@
-import Text.Show.Functions -- Para mostrar <Function> en consola cada vez que devuelven una
+module Kars where
 
---	Punto 1	--
--- 1)import Text.Show.Functions -- Para mostrar <Function> en consola cada vez que devuelven una
+import Text.Show.Functions -- Para mostrar <Function> en consola cada vez que devuelven una
 import Data.List -- Para métodos de colecciones que no vienen por defecto (ver guía de lenguajes)
 import Data.Maybe -- Por si llegan a usar un método de colección que devuelva “Just suElemento” o “Nothing”.
-
---	INCISO 1	--
 
 type Velocidad = Float
 type Nafta = Float
 type Truco = Auto -> Auto
-type Criterio = Auto -> Float
+type CriterioAuto = Auto -> Float
+type CriterioCarrera = Carrera -> [Auto]
 type Metros = Float
 type Kilometros = Float
 type Trampa = Carrera -> Carrera
@@ -20,8 +18,12 @@ data Auto = Auto {
     nivelDeNafta :: Nafta,
     velocidad :: Velocidad,
     nombreDeEnamorado :: String,
-  trucoParticular :: Truco
-} deriving Show
+    trucoParticular :: Truco
+} deriving (Show)
+
+--3.0)
+deReversa :: Truco
+deReversa unAuto = cambiarNafta ((velocidad unAuto)*0.2) unAuto
 
 --3.1)
 
@@ -31,57 +33,60 @@ data Carrera = Carrera {
     participantes :: [Auto],
     nombresPublico :: [String],
     trampa :: Trampa
-} deriving Show
+} deriving (Show)
 
---2)
---deReversa :: Velocidad -> Truco
---deReversa = aumentarNafta.(*0.2) en realidad solo cambiaria el tipo
-
---potreroFunes = Carrera 3 5 [rochaMcQueen,biankerr,gushtav,rodra] ["Ronco", "Tinch", "Dodain"] sacarAlPistero
+potreroFunes = Carrera 3 5 [rochaMcQueen,biankerr,gushtav,rodra] ["Ronco", "Tinch", "Dodain"] sacarAlPistero
 
 --3.2)
-
-cambiarParticipantesSegun :: (Carrera -> [Auto]) -> Carrera -> Carrera
-cambiarParticipantesSegun criterio unaCarrera = cambiarParticipantes unaCarrera (criterio unaCarrera)
-
---Para afectar a los participantes conviene pasarle la carrera y obtener los participantes o directamente pasarle los participantes??
-afectarParticipantes :: (Auto -> Auto) -> Carrera -> [Auto]
-afectarParticipantes criterio unaCarrera = map criterio (participantes unaCarrera)
-
---seleccionarParticipantes :: (Auto -> Bool) ->  [Auto] -> [Auto]
---seleccionarParticipantes criterio unaCarrera = filter criterio (participantes una Carrera)
 
 sacarAlPistero :: Trampa
 sacarAlPistero = cambiarParticipantesSegun (tail.participantes)
 
+cambiarParticipantesSegun :: CriterioCarrera -> Carrera -> Carrera
+cambiarParticipantesSegun criterio unaCarrera = cambiarParticipantes unaCarrera (criterio unaCarrera)
+
+cambiarParticipantes :: Carrera -> [Auto] -> Carrera
+cambiarParticipantes unaCarrera unosParticipantes = unaCarrera {participantes = unosParticipantes}
+
 lluvia :: Trampa
 lluvia = cambiarParticipantesSegun participantesDuranteLluvia
+
+participantesDuranteLluvia :: CriterioCarrera
+participantesDuranteLluvia  = afectarParticipantes (cambiarVelocidad (-10))
+
+cambiarVelocidad :: Velocidad -> Auto -> Auto
+cambiarVelocidad unaVelocidadAdicional unAuto = unAuto {velocidad = velocidad unAuto + unaVelocidadAdicional}
 
 neutralizarTrucos :: Trampa
 neutralizarTrucos  = cambiarParticipantesSegun participantesNeutralizados
 
-pocaReserva :: Trampa
-pocaReserva  = cambiarParticipantesSegun sacarParticipantesConPocaReserva
-
-podio :: Trampa
-podio  = cambiarParticipantesSegun participantesPodio
-
---Funciones Auxiliares para trampas
-
-participantesDuranteLluvia :: Carrera -> [Auto]
-participantesDuranteLluvia  = afectarParticipantes (disminuirVelocidad 10)
+afectarParticipantes :: (Auto -> Auto) -> Carrera -> [Auto]
+afectarParticipantes criterio unaCarrera = map criterio (participantes unaCarrera)
 
 participantesNeutralizados :: Carrera -> [Auto]
 participantesNeutralizados = afectarParticipantes (cambiaDeTruco inutilidad)
 
+cambiaDeTruco :: Truco -> Auto -> Auto
+cambiaDeTruco unTruco unAuto = unAuto {trucoParticular = unTruco}
+
+inutilidad :: Auto -> Auto
+inutilidad = id
+
+pocaReserva :: Trampa
+pocaReserva  = cambiarParticipantesSegun sacarParticipantesConPocaReserva
+
 sacarParticipantesConPocaReserva :: Carrera -> [Auto]
 sacarParticipantesConPocaReserva unaCarrera  = filter (not.tienePocaReserva) (participantes unaCarrera)
+
+tienePocaReserva :: Auto -> Bool
+tienePocaReserva  =  (esNaftaMenorA 30)
+
+podio :: Trampa
+podio  = cambiarParticipantesSegun participantesPodio
 
 participantesPodio :: Carrera -> [Auto]
 participantesPodio  = (take 3 . participantes)
 
-tienePocaReserva :: Auto -> Bool
-tienePocaReserva  =  (esNaftaMenorA 30)
 
 --3.3)
 
@@ -103,47 +108,33 @@ realizarTruco unAuto = (trucoParticular unAuto) unAuto
 --enamoradeEstaEnElPublico unaCarrera unAuto = any ((==).nombreDeEnamorado unAuto) (publico unaCarrera)
 --puedenRealizarUnTruco = seleccionarParticipantes puedeRealizarUnTruco
 
+
+--seleccionarParticipantes :: (Auto -> Bool) ->  [Auto] -> [Auto]
+--seleccionarParticipantes criterio unaCarrera = filter criterio (participantes una Carrera)
+
+
 --participantesLuegoDeUnaVuelta unaCarrera = afectarParticipantes (sufrirTrampa.maniobraEnamorado.combustibleLuegoDeVuelta unaCarrera)
---combustibleLuegoDeVuelta unaCarrera =  (gastarNafta.calcularCombustibleVuelta unaCarrera)
+--combustibleLuegoDeVuelta unaCarrera =  (cambiarNafta.(*(-1)).calcularCombustibleVuelta unaCarrera)
 --calcularCombustibleVuelta unaCarrera unAuto = div (longitudPista unaPista) ((*10).velocidad)
 
 
 --darVuelta :: Carrera -> Carrera
 --darVuelta unaCarrera = cambiarParticipantesSegun participantesLuegoDeUnaVuelta
 
-cambiarParticipantes :: Carrera ->  [Auto] -> Carrera
-cambiarParticipantes unaCarrera unosParticipantes = unaCarrera {participantes = unosParticipantes}
-
-inutilidad :: Auto -> Auto
-inutilidad = id
-
-cambiaDeTruco :: Truco -> Auto -> Auto
-cambiaDeTruco unTruco unAuto = unAuto {trucoParticular = unTruco}
-
-deReversa :: Metros -> Truco
-deReversa = aumentarNafta.(*0.2)
-
-aumentarNafta :: Nafta -> Auto -> Auto
-aumentarNafta cantidadNafta unAuto = unAuto {nivelDeNafta = nivelDeNafta unAuto + cantidadNafta}
-gastarNafta :: Nafta -> Auto -> Auto
-gastarNafta cantidadNafta unAuto = unAuto {nivelDeNafta = nivelDeNafta unAuto - cantidadNafta}
+cambiarNafta :: Nafta -> Auto -> Auto
+cambiarNafta cantidadNafta unAuto = unAuto {nivelDeNafta = nivelDeNafta unAuto + cantidadNafta}
 
 impresionar :: Truco
 impresionar  = incrementarVelocidadSegun velocidad
 
-incrementarVelocidadSegun :: Criterio -> Auto -> Auto
-incrementarVelocidadSegun criterio auto = aumentarVelocidad (criterio auto) auto
+incrementarVelocidadSegun :: CriterioAuto -> Auto -> Auto
+incrementarVelocidadSegun criterio auto = cambiarVelocidad (criterio auto) auto
 
 incrementarVelocidadPorEnamorade :: Truco
 incrementarVelocidadPorEnamorade = incrementarVelocidadSegun (velocidadDeTurbo.cantDeVocales.nombreDeEnamorado)
 
-aumentarVelocidad :: Velocidad -> Auto -> Auto
-aumentarVelocidad unaVelocidadAdicional unAuto = unAuto {velocidad = velocidad unAuto + unaVelocidadAdicional}
-disminuirVelocidad :: Velocidad -> Auto -> Auto
-disminuirVelocidad unaVelocidadAdicional unAuto = unAuto {velocidad = velocidad unAuto - unaVelocidadAdicional}
-
 nitro :: Truco
-nitro = aumentarVelocidad 15
+nitro = cambiarVelocidad 15
 
 fingirAmor :: String -> Truco
 fingirAmor nombreEnamorade = elijeOtreEnamorade nombreEnamorade
@@ -152,7 +143,7 @@ elijeOtreEnamorade :: String -> Auto -> Auto
 elijeOtreEnamorade nombreEnamorade unAuto = unAuto {nombreDeEnamorado = nombreEnamorade}
 
 --3)
-rochaMcQueen = Auto "Rocha McQueen" 300 0 "Ronco" (deReversa 1000)
+rochaMcQueen = Auto "Rocha McQueen" 300 0 "Ronco" (deReversa)
 biankerr = Auto "Biankerr" 500 20 "Tinch" impresionar
 gushtav = Auto "Gushtav" 200 130 "PetiLaLinda" nitro
 rodra  = Auto "Rodra" 0 50 "Taisa" (fingirAmor "Petra")
@@ -188,7 +179,7 @@ puedeRealizarUnTruco auto = (tieneNafta auto) && (velocidadEsMenorACien auto)
 -- Punto 4 --
 
 comboLoco :: Truco
-comboLoco =  deReversa 1000.nitro
+comboLoco =  deReversa.nitro
 
 queTrucazo :: String -> Truco
 queTrucazo enamorado = incrementarVelocidadPorEnamorade.elijeOtreEnamorade enamorado
