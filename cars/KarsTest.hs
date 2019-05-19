@@ -4,6 +4,12 @@ import Test.Hspec
 cantidadDeParticipantes :: Trampa -> Carrera -> Int
 cantidadDeParticipantes trampa carrera = length.participantes.trampa carrera
 
+yaNoParticipaDeLaCarrera :: Auto -> Trampa -> Carrera -> Bool
+yaNoParticipaDeLaCarrera unAuto trampa = not.(elem (nombre unAuto)).nombreDeAutosEnLista.participantes.trampa
+
+nombreDeAutosEnLista :: [Auto] -> [String]
+nombreDeAutoEnLista = map nombre
+
 velocidadUtlimoParticipante :: Trampa -> Carrera -> Int
 velocidadUtlimoParticipante trampa carrera = velocidad.ultimoParticipante.trampa carrera
 
@@ -25,13 +31,13 @@ main = hspec $ do
 				(cantidadDeParticipantes) sacarAlPistero potreroFunes `shouldBe` 3
 
 			it "rochaMcQueen ya no participa en potreroFunes tras sacarAlPistero" $ do
-				 `shouldBe` True
+				 yaNoParticipaDeLaCarrera rochaMcQueen sacarAlPistero `shouldBe` True
 
 			it "La cantidad de participantes en potreroFunes luego de pocaReserva es 3" $ do
 				cantidadDeParticipantes pocaReserva potreroFunes `shouldBe` 3
 				
 			it "El participante llamado “rodra” ya no debería estar entre los participantes de potreroFunes luego de aplicar pocaReserva" $ do
-				
+				yaNoParticipaDeLaCarrera rodra pocaReserva `shouldBe` True
 			it "La cantidad de participantes luego de aplicar podio en potreroFunes es 3" $ do
 				 cantidadDeParticipantes podio potreroFunes `shouldBe` 3
 				 
