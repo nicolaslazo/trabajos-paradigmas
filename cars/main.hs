@@ -138,9 +138,9 @@ elMasRapido (x:xs) -- TODO: Completar
 
 --3.5)
 
-elGranTruco :: [Truco] -> Auto -> Auto
-elGranTruco [] = id
-elGranTruco (x:xs) = elGranTruco xs . x
+elGranTruco :: [(Truco)] -> Auto -> Auto
+elGranTruco [] unAuto = unAuto
+elGranTruco (x:xs) unAuto = elGranTruco xs (x unAuto)
 
 --3.6)
 
