@@ -16,6 +16,9 @@ velocidadUtlimoParticipante trampa  = velocidad.ultimoParticipante.trampa
 ultimoParticipante :: Carrera -> Auto
 ultimoParticipante carrera =  last (participantes carrera)
 
+velocidadPrimerParticipante :: Trampa -> Carrera -> Velocidad
+velocidadPrimerParticipante trampa = velocidad.primerParticipante.trampa
+
 nivelDeNaftaPrimerParticipante :: Trampa -> Carrera -> Nafta
 nivelDeNaftaPrimerParticipante trampa  = nivelDeNafta.primerParticipante.trampa 
 
@@ -59,7 +62,8 @@ main = hspec $ do
 				nivelDeNaftaPrimerParticipante darVuelta potreroFunes `shouldBe` 490
 
 			it "La velocidad del primer participante (biankerr porque rochaMcQueen quedó afuera) luego de dar una vuelta en potreroFunes es 40" $ do	
-
+				velocidadPrimerParticipante darVuelta potreroFunes `shouldBe` 40
+				
 			it "la cantidad de participantes tras dar dos vueltas en potrero funes es 2" $ do
 				cantidadDeParticipantes darDosVueltas potreroFunes `shouldBe` 2
 
