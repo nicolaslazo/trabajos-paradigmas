@@ -9,7 +9,7 @@ yaNoParticipaDeLaCarrera :: Auto -> Trampa -> Carrera -> Bool
 yaNoParticipaDeLaCarrera unAuto trampa = not.(elem (nombre unAuto)).nombreDeAutosEnLista.participantes.trampa
 
 nombreDeAutosEnLista :: [Auto] -> [String]
-nombreDeAutoEnLista = map nombre
+nombreDeAutosEnLista = map nombre
 
 velocidadUtlimoParticipante :: Trampa -> Carrera -> Velocidad
 velocidadUtlimoParticipante trampa  = velocidad.ultimoParticipante.trampa 
