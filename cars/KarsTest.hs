@@ -1,6 +1,7 @@
 import Kars
 import Test.Hspec
 
+--- FUNCIONES AUXILIARES ----
 cantidadDeParticipantes :: Trampa -> Carrera -> Int
 cantidadDeParticipantes trampa carrera = length.participantes.trampa carrera
 
@@ -27,6 +28,8 @@ primerParticipante carrera = head (participantes carrera)
 
 darDosVueltas :: Carrera -> Carrera
 darDosVueltas = darVuelta.darVuelta
+
+--------------------------------------------------------------------------
 
 main :: IO ()
 main = hspec $ do
