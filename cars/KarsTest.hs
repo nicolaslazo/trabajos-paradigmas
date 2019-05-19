@@ -38,6 +38,7 @@ main = hspec $ do
 				
 			it "El participante llamado “rodra” ya no debería estar entre los participantes de potreroFunes luego de aplicar pocaReserva" $ do
 				yaNoParticipaDeLaCarrera rodra pocaReserva `shouldBe` True
+				
 			it "La cantidad de participantes luego de aplicar podio en potreroFunes es 3" $ do
 				 cantidadDeParticipantes podio potreroFunes `shouldBe` 3
 				 
