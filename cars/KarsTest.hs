@@ -1,13 +1,6 @@
 import Kars
 import Test.Hspec
 
-rochaMcQueen = Auto "Rocha McQueen" 300 0 "Ronco" (deReversa 1000)
-biankerr = Auto "Biankerr" 500 20 "Tinch" impresionar
-gushtav = Auto "Gushtav" 200 130 "PetiLaLinda" nitro
-rodra  = Auto "Rodra" 0 50 "Taisa" (fingirAmor "Petra")
-
-potreroFunes = Carrera 3 5 [rochaMcQueen,biankerr,gushtav,rodra] ["Ronco", "Tinch", "Dodain"] sacarAlPistero
-
 main :: IO ()
 main = hspec $ do
 	describe "Casos de prueba Kars" $ do
@@ -16,7 +9,7 @@ main = hspec $ do
 				nivelDeNafta rochaMcQueen `shouldBe` 300
 
 			it "La nafta de rodra tras deReversa es 10" $ do
-				deReversa rodra `shouldBe` nivelDeNafta = 10
+				deReversa rodra `shouldBe` 10
 
 		describe "Punto 3.2" $ do
 			it "La cantidad de participantes en potreroFunes luego de sacarAlPistero es 3" $ do
