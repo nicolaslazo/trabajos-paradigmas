@@ -16,6 +16,15 @@ velocidadUtlimoParticipante trampa  = velocidad.ultimoParticipante.trampa
 ultimoParticipante :: Carrera -> Auto
 ultimoParticipante carrera =  last (participantes carrera)
 
+nivelDeNaftaPrimerParticipante :: Trampa -> Carrera -> Nafta
+nivelDeNaftaPrimerParticipante trampa  = nivelDeNafta.primerParticipante.trampa 
+
+primerParticipante :: Carrera -> Auto
+primerParticipante carrera = head (participantes carrera)
+
+darDosVueltas :: Carrera -> Carrera
+darDosVueltas = darVuelta.darVuelta
+
 main :: IO ()
 main = hspec $ do
 	describe "Casos de prueba Kars" $ do
@@ -47,12 +56,15 @@ main = hspec $ do
 
 		describe "Punto 3.3" $ do
 			it "El nivel de nafta del primer participante (biankerr porque rochaMcQueen quedó afuera) luego de dar una vuelta en potreroFunes es 490" $ do
-				
+				nivelDeNaftaPrimerParticipante darVuelta potreroFunes `shouldBe` 490
+
 			it "La velocidad del primer participante (biankerr porque rochaMcQueen quedó afuera) luego de dar una vuelta en potreroFunes es 40" $ do	
 
 			it "la cantidad de participantes tras dar dos vueltas en potrero funes es 2" $ do
+				cantidadDeParticipantes darDosVueltas potreroFunes `shouldBe` 2
 
 			it "Luego de dos vueltas, el nivelDeNafta del primer participante (gushtav) es 70" $ do
+				nivelDeNaftaPrimerParticipante darDosVueltas potreroFunes `shouldBe` 70
 
 			it "Rodra debe ser el único participante luego de correr la carrera de potreroFunes" $ do
 
