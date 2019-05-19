@@ -131,10 +131,12 @@ puedeRealizarManiobraEnamorado unaCarrera unAuto = (enamoradeEstaEnElPublico una
 --3.4)
 
 quienGana :: Carrera -> Auto
-quienGana = elMasRapido.participantes
+quienGana = (foldl1 elMasRapido).participantes.correrCarrera
 
-elMasRapido [] = []
-elMasRapido (x:xs) -- TODO: Completar
+elMasRapido :: Auto -> Auto -> Auto
+elMasRapido auto1 auto2
+    | (velocidad auto1) > (velocidad auto2) = auto1  
+    | otherwise = auto2
 
 --3.5)
 
