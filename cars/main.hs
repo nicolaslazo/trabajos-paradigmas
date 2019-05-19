@@ -128,6 +128,33 @@ enamoradeEstaEnElPublico unaCarrera unAuto = any ( coincidenNombres (nombreDeEna
 puedeRealizarManiobraEnamorado ::  Carrera -> Auto -> Bool
 puedeRealizarManiobraEnamorado unaCarrera unAuto = (enamoradeEstaEnElPublico unaCarrera unAuto) && (puedeRealizarUnTruco unAuto)
 
+--3.4)
+
+quienGana :: Carrera -> Auto
+quienGana = elMasRapido.participantes
+
+elMasRapido [] = []
+elMasRapido (x:xs) -- TODO: Completar
+
+--3.5)
+
+elGranTruco :: [Truco] -> Auto -> Auto
+elGranTruco [] = id
+elGranTruco (x:xs) = elGranTruco xs . x
+
+--3.6)
+
+--	Nota: no se puede correr una carrera de infinitos participantes
+--		porque a la hora de llamar a afectarParticipantes el map nunca terminaria de correr
+
+primerParticipanteDsp2Vueltas :: Carrera -> Auto
+primerParticipanteDsp2Vueltas = head . participantes . darVuelta . darVuelta
+
+--	Nota: no se puede saber el estado de la carrera despues de una vuelta
+--		porque no se puede calcular el estado de los infinitos participantes
+
+-- Comienzo de entrega 1
+
 coincidenNombres ::  String -> String -> Bool
 coincidenNombres unNombre  =  (==) unNombre
 
