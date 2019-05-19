@@ -10,8 +10,8 @@ yaNoParticipaDeLaCarrera unAuto trampa = not.(elem (nombre unAuto)).nombreDeAuto
 nombreDeAutosEnLista :: [Auto] -> [String]
 nombreDeAutoEnLista = map nombre
 
-velocidadUtlimoParticipante :: Trampa -> Carrera -> Int
-velocidadUtlimoParticipante trampa carrera = velocidad.ultimoParticipante.trampa carrera
+velocidadUtlimoParticipante :: Trampa -> Carrera -> Velocidad
+velocidadUtlimoParticipante trampa  = velocidad.ultimoParticipante.trampa 
 
 ultimoParticipante :: Carrera -> Auto
 ultimoParticipante carrera =  last (participantes carrera)
