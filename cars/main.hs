@@ -164,13 +164,10 @@ realizarTruco :: Auto -> Auto
 realizarTruco unAuto = (trucoParticular unAuto) unAuto
 
 combustibleLuegoDeVuelta :: Carrera -> [Auto]
-combustibleLuegoDeVuelta unaCarrera = afectarParticipantes (gastarNaftaSegun (calcularCombustibleVuelta unaCarrera) ) unaCarrera
+combustibleLuegoDeVuelta unaCarrera = afectarParticipantes (cambiarNaftaSegun (calcularCombustibleVuelta unaCarrera) ) unaCarrera
 
-gastarNaftaSegun :: (Auto -> Nafta) -> Auto -> Auto
-gastarNaftaSegun criterio unAuto = gastarNafta (criterio unAuto) unAuto
-
-gastarNafta :: Nafta -> Auto -> Auto
-gastarNafta cantidadNafta unAuto = unAuto {nivelDeNafta = nivelDeNafta unAuto - cantidadNafta}
+cambiarNaftaSegun :: (Auto -> Nafta) -> Auto -> Auto
+cambiarNaftaSegun criterio unAuto = cambiarNafta (criterio unAuto) unAuto
 
 restarVuelta :: Carrera ->  Carrera
 restarVuelta unaCarrera  = unaCarrera {vueltas = (vueltas unaCarrera) - 1}
@@ -179,7 +176,7 @@ cambiarNafta :: Nafta -> Auto -> Auto
 cambiarNafta cantidadNafta unAuto = unAuto {nivelDeNafta = nivelDeNafta unAuto + cantidadNafta}
 
 calcularCombustibleVuelta :: Carrera -> Auto -> Nafta
-calcularCombustibleVuelta unaCarrera unAuto = (longitudPista unaCarrera) / ( (*10) (velocidad unAuto))
+calcularCombustibleVuelta unaCarrera unAuto = (*(-1)) ((* (velocidad unAuto))((/10)(longitudPista unaCarrera)))
 
 impresionar :: Truco
 impresionar  = incrementarVelocidadSegun velocidad
