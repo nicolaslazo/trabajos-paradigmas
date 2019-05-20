@@ -107,7 +107,7 @@ participantesLuegoDeUnaVuelta = (participantesSufrirTrampa.participantesEnamorad
 
 correrCarrera :: Carrera -> Carrera
 correrCarrera unaCarrera
-    | (vueltas unaCarrera) >= 1 = darVuelta unaCarrera
+    | (vueltas unaCarrera) >= 1 = (correrCarrera.darVuelta) unaCarrera
     | otherwise = id unaCarrera
 
 
