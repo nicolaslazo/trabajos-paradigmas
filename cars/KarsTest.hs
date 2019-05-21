@@ -9,7 +9,7 @@ yaNoParticipaDeLaCarrera :: Auto -> Trampa -> Carrera -> Bool
 yaNoParticipaDeLaCarrera unAuto trampa = not.(elem (nombre unAuto)).nombreDeAutosEnLista.participantes.trampa
 
 nombreDeAutosEnLista :: [Auto] -> [String]
-nombreDeAutosEnLista = map nombre
+nombreDeAutosEnLista = map 
 
 velocidadUtlimoParticipante :: Trampa -> Carrera -> Velocidad
 velocidadUtlimoParticipante trampa  = velocidad.ultimoParticipante.trampa 
@@ -28,6 +28,9 @@ primerParticipante carrera = head (participantes carrera)
 
 darDosVueltas :: Carrera -> Carrera
 darDosVueltas = darVuelta.darVuelta
+
+esElUnicoParticipante :: String -> Carrera -> Bool
+esElUnicoParticipante nombre carrera = (length.participantes) carrera == 1 && (head.participantes) carrera == nombre
 
 --------------------------------------------------------------------------
 
@@ -84,16 +87,17 @@ main = hspec $ do
 
 
 			it "Rodra debe ser el único participante luego de correr la carrera de potreroFunes" $ do
-
+				(esElUnicoParticipante "Rodra" . correrCarrera) potreroFunes
+				
 
 		describe "Punto 3.4" $ do
 			it "El ganador de potreroFunes es rodra" $ do
-
+				quienGana potreroFunes `shouldBe` rodra
 
 		describe "Punto 3.5" $ do
 			it "La velocidad de rodra tras realizar elGranTruco con nitro, deReversa e impresionar es 140" $ do
-
+				(velocidad . elGranTruco [nitro, deReversa, impresionar]) rodra `shouldBe` 140
 
 			it "El nivelDeNafta de rodra tras realizar elGranTruco con nitro, deReversa e impresionar es 13" $ do
-
+				(nivelDeNafta . elGranTruco [nitro, deReversa, impresionar]) `shouldBe` 13
 
