@@ -30,7 +30,7 @@ darDosVueltas :: Carrera -> Carrera
 darDosVueltas = darVuelta.darVuelta
 
 esElUnicoParticipante :: String -> Carrera -> Bool
-esElUnicoParticipante nombre carrera = (length.nombreDeAutosEnLista.participantes) carrera == 1 && (nombre.head.participantes) carrera == nombre
+esElUnicoParticipante nombreDeParticipante carrera = (length.nombreDeAutosEnLista.participantes) carrera == 1 && (nombre.head.participantes) carrera == nombreDeParticipante
 
 --------------------------------------------------------------------------
 
