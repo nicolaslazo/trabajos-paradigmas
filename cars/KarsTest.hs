@@ -3,13 +3,13 @@ import Test.Hspec
 
 --- FUNCIONES AUXILIARES ----
 cantidadDeParticipantes :: Trampa -> Carrera -> Int
-cantidadDeParticipantes trampa carrera = length.participantes.trampa carrera
+cantidadDeParticipantes trampa = (length.participantes.trampa) 
 
 yaNoParticipaDeLaCarrera :: Auto -> Trampa -> Carrera -> Bool
 yaNoParticipaDeLaCarrera unAuto trampa = not.(elem (nombre unAuto)).nombreDeAutosEnLista.participantes.trampa
 
 nombreDeAutosEnLista :: [Auto] -> [String]
-nombreDeAutosEnLista = map 
+nombreDeAutosEnLista = map nombre
 
 velocidadUtlimoParticipante :: Trampa -> Carrera -> Velocidad
 velocidadUtlimoParticipante trampa  = velocidad.ultimoParticipante.trampa 
@@ -30,7 +30,7 @@ darDosVueltas :: Carrera -> Carrera
 darDosVueltas = darVuelta.darVuelta
 
 esElUnicoParticipante :: String -> Carrera -> Bool
-esElUnicoParticipante nombre carrera = (length.participantes) carrera == 1 && (head.participantes) carrera == nombre
+esElUnicoParticipante nombre carrera = (length.nombreDeAutosEnLista.participantes) carrera == 1 && (nombre.head.participantes) carrera == nombre
 
 --------------------------------------------------------------------------
 
