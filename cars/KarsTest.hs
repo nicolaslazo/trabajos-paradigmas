@@ -6,7 +6,7 @@ cantidadDeParticipantes :: Trampa -> Carrera -> Int
 cantidadDeParticipantes trampa = (length.participantes.trampa) 
 
 yaNoParticipaDeLaCarrera :: Auto -> Trampa -> Carrera -> Bool
-yaNoParticipaDeLaCarrera unAuto trampa = not.(elem (nombre unAuto)).nombreDeAutosEnLista.participantes.trampa
+yaNoParticipaDeLaCarrera unAuto laTrampa = not.(elem (nombre unAuto)).nombreDeAutosEnLista.participantes.laTrampa
 
 nombreDeAutosEnLista :: [Auto] -> [String]
 nombreDeAutosEnLista = map nombre
@@ -30,7 +30,7 @@ darDosVueltas :: Carrera -> Carrera
 darDosVueltas = darVuelta.darVuelta
 
 esElUnicoParticipante :: String -> Carrera -> Bool
-esElUnicoParticipante nombreDeParticipante carrera = (length.nombreDeAutosEnLista.participantes) carrera == 1 && (nombre.head.participantes) carrera == nombreDeParticipante
+esElUnicoParticipante nombreDeParticipante carrera = (length.nombreDeAutosEnLista.participantes) carrera == 1 && ((elem nombreDeParticipante).nombreDeAutosEnLista.participantes) carrera
 
 --------------------------------------------------------------------------
 
