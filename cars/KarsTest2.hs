@@ -64,9 +64,11 @@ main = hspec $ do
 {-
        describe "Punto 3.3" $ do
 
-			it "El nivel de nafta del primer participante (biankerr porque rochaMcQueen quedó afuera) luego de dar una vuelta en potreroFunes es 490" $ do nivelDeNaftaPrimerParticipante darVuelta potreroFunes `shouldBe` 490
+			it "El nivel de nafta del primer participante (biankerr porque rochaMcQueen quedó afuera) luego de dar una vuelta en potreroFunes es 490" $ do
+				nivelDeNaftaPrimerParticipante darVuelta potreroFunes `shouldBe` 490
 
-			it "La velocidad del primer participante (biankerr porque rochaMcQueen quedó afuera) luego de dar una vuelta en potreroFunes es 40" $ do velocidadParticipanteSegun darVuelta head potreroFunes `shouldBe` 40
+			it "La velocidad del primer participante (biankerr porque rochaMcQueen quedó afuera) luego de dar una vuelta en potreroFunes es 40" $ do
+				velocidadParticipanteSegun darVuelta head potreroFunes `shouldBe` 40
 
 			it "la cantidad de participantes tras dar dos vueltas en potrero funes es 2" $ do
 				cantidadDeParticipantesSegun darDosVueltas potreroFunes `shouldBe` 2
