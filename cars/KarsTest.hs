@@ -3,7 +3,7 @@ import Test.Hspec
 
 --- FUNCIONES AUXILIARES ----
 cantidadDeParticipantes :: Trampa -> Carrera -> Int
-cantidadDeParticipantes trampa = (length.participantes.trampa) 
+cantidadDeParticipantes trampa = (length.participantes.trampa)
 
 yaNoParticipaDeLaCarrera :: Auto -> Trampa -> Carrera -> Bool
 yaNoParticipaDeLaCarrera unAuto laTrampa = not.(elem (nombre unAuto)).nombreDeAutosEnLista.participantes.laTrampa
@@ -12,7 +12,7 @@ nombreDeAutosEnLista :: [Auto] -> [String]
 nombreDeAutosEnLista = map nombre
 
 velocidadUtlimoParticipante :: Trampa -> Carrera -> Velocidad
-velocidadUtlimoParticipante trampa  = velocidad.ultimoParticipante.trampa 
+velocidadUtlimoParticipante trampa  = velocidad.ultimoParticipante.trampa
 
 ultimoParticipante :: Carrera -> Auto
 ultimoParticipante carrera =  last (participantes carrera)
@@ -21,7 +21,7 @@ velocidadPrimerParticipante :: Trampa -> Carrera -> Velocidad
 velocidadPrimerParticipante trampa = velocidad.primerParticipante.trampa
 
 nivelDeNaftaPrimerParticipante :: Trampa -> Carrera -> Nafta
-nivelDeNaftaPrimerParticipante trampa  = nivelDeNafta.primerParticipante.trampa 
+nivelDeNaftaPrimerParticipante trampa  = nivelDeNafta.primerParticipante.trampa
 
 primerParticipante :: Carrera -> Auto
 primerParticipante carrera = head (participantes carrera)
@@ -50,21 +50,21 @@ main = hspec $ do
 
 
 			it "rochaMcQueen ya no participa en potreroFunes tras sacarAlPistero" $ do
-				 yaNoParticipaDeLaCarrera rochaMcQueen sacarAlPistero `shouldBe` True
+				 yaNoParticipaDeLaCarrera rochaMcQueen sacarAlPistero potreroFunes `shouldBe` True
 
 
 			it "La cantidad de participantes en potreroFunes luego de pocaReserva es 3" $ do
 				cantidadDeParticipantes pocaReserva potreroFunes `shouldBe` 3
-				
-				
-			it "El participante llamado “rodra” ya no debería estar entre los participantes de potreroFunes luego de aplicar pocaReserva" $ do
-				yaNoParticipaDeLaCarrera rodra pocaReserva `shouldBe` True
-				
-				
+
+
+			it "El participante llamado rodra ya no debería estar entre los participantes de potreroFunes luego de aplicar pocaReserva" $ do
+				yaNoParticipaDeLaCarrera rodra pocaReserva potreroFunes `shouldBe` True
+
+
 			it "La cantidad de participantes luego de aplicar podio en potreroFunes es 3" $ do
 				 cantidadDeParticipantes podio potreroFunes `shouldBe` 3
-				
-				
+
+
 			it "La velocidad del último participante de potreroFunes (rodra) luego de la lluvia es 40" $ do
 				velocidadUtlimoParticipante lluvia potreroFunes `shouldBe` 40
 
@@ -74,10 +74,10 @@ main = hspec $ do
 				nivelDeNaftaPrimerParticipante darVuelta potreroFunes `shouldBe` 490
 
 
-			it "La velocidad del primer participante (biankerr porque rochaMcQueen quedó afuera) luego de dar una vuelta en potreroFunes es 40" $ do	
+			it "La velocidad del primer participante (biankerr porque rochaMcQueen quedó afuera) luego de dar una vuelta en potreroFunes es 40" $ do
 				velocidadPrimerParticipante darVuelta potreroFunes `shouldBe` 40
-				
-				
+
+
 			it "La cantidad de participantes tras dar dos vueltas en potrero funes es 2" $ do
 				cantidadDeParticipantes darDosVueltas potreroFunes `shouldBe` 2
 
@@ -88,16 +88,15 @@ main = hspec $ do
 
 			it "Rodra debe ser el único participante luego de correr la carrera de potreroFunes" $ do
 				(esElUnicoParticipante "Rodra" . correrCarrera) potreroFunes
-				
+
 
 		describe "Punto 3.4" $ do
 			it "El ganador de potreroFunes es rodra" $ do
-				quienGana potreroFunes `shouldBe` rodra
+				  (nombre.quienGana) potreroFunes `shouldBe` "Rodra"
 
 		describe "Punto 3.5" $ do
 			it "La velocidad de rodra tras realizar elGranTruco con nitro, deReversa e impresionar es 130" $ do
 				(velocidad . elGranTruco [nitro, deReversa, impresionar]) rodra `shouldBe` 130
 
 			it "El nivelDeNafta de rodra tras realizar elGranTruco con nitro, deReversa e impresionar es 13" $ do
-				(nivelDeNafta . elGranTruco [nitro, deReversa, impresionar]) `shouldBe` 13
-
+				(nivelDeNafta. elGranTruco [nitro, deReversa, impresionar]) rodra `shouldBe` 13
