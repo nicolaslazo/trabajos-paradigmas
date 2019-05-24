@@ -8,7 +8,7 @@ type Velocidad = Float
 type Nafta = Float
 type Truco = Auto -> Auto
 type CriterioAuto = Auto -> Float
-type CriterioCarrera = Carrera -> [Auto]
+type CriterioCarrera = [Auto] -> [Auto]
 type Metros = Float
 type Kilometros = Float
 type Trampa = Carrera -> Carrera
@@ -40,31 +40,22 @@ potreroFunes = Carrera 3 5 [rochaMcQueen,biankerr,gushtav,rodra] ["Ronco", "Tinc
 --3.2)
 
 sacarAlPistero :: Trampa
-sacarAlPistero = cambiarParticipantesSegun (tail.participantes)
+sacarAlPistero = cambiarParticipantesSegun tail
 
 cambiarParticipantesSegun :: CriterioCarrera -> Carrera -> Carrera
-cambiarParticipantesSegun criterio unaCarrera = cambiarParticipantes unaCarrera (criterio unaCarrera)
+cambiarParticipantesSegun criterio unaCarrera = cambiarParticipantes unaCarrera ((criterio.participantes) unaCarrera)
 
 cambiarParticipantes :: Carrera -> [Auto] -> Carrera
 cambiarParticipantes unaCarrera unosParticipantes = unaCarrera {participantes = unosParticipantes}
 
 lluvia :: Trampa
-lluvia = cambiarParticipantesSegun participantesDuranteLluvia
-
-participantesDuranteLluvia :: CriterioCarrera
-participantesDuranteLluvia  = afectarParticipantes (cambiarVelocidad (-10))
+lluvia = cambiarParticipantesSegun (map (cambiarVelocidad (-10)))
 
 cambiarVelocidad :: Velocidad -> Auto -> Auto
 cambiarVelocidad unaVelocidadAdicional unAuto = unAuto {velocidad = velocidad unAuto + unaVelocidadAdicional}
 
 neutralizarTrucos :: Trampa
-neutralizarTrucos  = cambiarParticipantesSegun participantesNeutralizados
-
-afectarParticipantes :: (Auto -> Auto) -> Carrera -> [Auto]
-afectarParticipantes criterio unaCarrera = map criterio (participantes unaCarrera)
-
-participantesNeutralizados :: Carrera -> [Auto]
-participantesNeutralizados = afectarParticipantes (cambiaDeTruco inutilidad)
+neutralizarTrucos  =  cambiarParticipantesSegun (map (cambiaDeTruco inutilidad))
 
 cambiaDeTruco :: Truco -> Auto -> Auto
 cambiaDeTruco unTruco unAuto = unAuto {trucoParticular = unTruco}
@@ -73,20 +64,13 @@ inutilidad :: Auto -> Auto
 inutilidad = id
 
 pocaReserva :: Trampa
-pocaReserva  = cambiarParticipantesSegun sacarParticipantesConPocaReserva
-
-sacarParticipantesConPocaReserva :: Carrera -> [Auto]
-sacarParticipantesConPocaReserva unaCarrera  = filter (not.tienePocaReserva) (participantes unaCarrera)
+pocaReserva  = cambiarParticipantesSegun (filter (not.tienePocaReserva))
 
 tienePocaReserva :: Auto -> Bool
 tienePocaReserva  =  (esNaftaMenorA 30)
 
 podio :: Trampa
-podio  = cambiarParticipantesSegun participantesPodio
-
-participantesPodio :: Carrera -> [Auto]
-participantesPodio  = (take 3 . participantes)
-
+podio  = cambiarParticipantesSegun (take 3)
 
 --3.3)
 
@@ -94,10 +78,10 @@ participantesSufrirTrampa :: Carrera -> Carrera
 participantesSufrirTrampa unaCarrera = (trampa unaCarrera) unaCarrera
 
 participantesEnamoradesLuegoDeHacerTruco ::  Carrera ->  Carrera
-participantesEnamoradesLuegoDeHacerTruco  = cambiarParticipantesSegun participantesConEnamoradeEnPublico
+participantesEnamoradesLuegoDeHacerTruco unaCarrera  = cambiarParticipantesSegun (map (loVenSusEnamorades unaCarrera)) unaCarrera
 
 participantesGastarCombustibleVuelta :: Carrera -> Carrera
-participantesGastarCombustibleVuelta = cambiarParticipantesSegun combustibleLuegoDeVuelta
+participantesGastarCombustibleVuelta unaCarrera = cambiarParticipantesSegun (map (cambiarNaftaSegun (calcularCombustibleVuelta unaCarrera))) unaCarrera
 
 darVuelta :: Carrera -> Carrera
 darVuelta = restarVuelta.participantesLuegoDeUnaVuelta
@@ -113,9 +97,6 @@ correrCarrera unaCarrera
 
 
 --Funciones Auxiliares 3.3
-
-participantesConEnamoradeEnPublico ::  Carrera -> [Auto]
-participantesConEnamoradeEnPublico unaCarrera = afectarParticipantes (loVenSusEnamorades unaCarrera) unaCarrera
 
 loVenSusEnamorades ::  Carrera -> Auto -> Auto
 loVenSusEnamorades unaCarrera unAuto
@@ -135,7 +116,7 @@ quienGana = (foldl1 elMasRapido).participantes.correrCarrera
 
 elMasRapido :: Auto -> Auto -> Auto
 elMasRapido auto1 auto2
-    | (velocidad auto1) > (velocidad auto2) = auto1  
+    | (velocidad auto1) > (velocidad auto2) = auto1
     | otherwise = auto2
 
 --3.5)
@@ -162,9 +143,6 @@ coincidenNombres unNombre  =  (==) unNombre
 
 realizarTruco :: Auto -> Auto
 realizarTruco unAuto = (trucoParticular unAuto) unAuto
-
-combustibleLuegoDeVuelta :: Carrera -> [Auto]
-combustibleLuegoDeVuelta unaCarrera = afectarParticipantes (cambiarNaftaSegun (calcularCombustibleVuelta unaCarrera) ) unaCarrera
 
 cambiarNaftaSegun :: (Auto -> Nafta) -> Auto -> Auto
 cambiarNaftaSegun criterio unAuto = cambiarNafta (criterio unAuto) unAuto
