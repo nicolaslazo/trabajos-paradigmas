@@ -23,7 +23,7 @@ data Auto = Auto {
 
 --3.0)
 deReversa :: Truco
-deReversa unAuto = cambiarNafta ((velocidad unAuto)*0.2) unAuto
+deReversa = cambiarNaftaSegun ((*0.2).nivelDeNafta) 
 
 --3.1)
 
@@ -67,7 +67,7 @@ pocaReserva :: Trampa
 pocaReserva  = cambiarParticipantesSegun (filter (not.tienePocaReserva))
 
 tienePocaReserva :: Auto -> Bool
-tienePocaReserva  =  (esNaftaMenorA 30)
+tienePocaReserva  =  ((<30).nivelDeNafta)
 
 podio :: Trampa
 podio  = cambiarParticipantesSegun (take 3)
@@ -83,25 +83,18 @@ participantesEnamoradesLuegoDeHacerTruco unaCarrera  = cambiarParticipantesSegun
 participantesGastarCombustibleVuelta :: Carrera -> Carrera
 participantesGastarCombustibleVuelta unaCarrera = cambiarParticipantesSegun (map (cambiarNaftaSegun (calcularCombustibleVuelta unaCarrera))) unaCarrera
 
-darVuelta :: Carrera -> Carrera
-darVuelta = restarVuelta.participantesLuegoDeUnaVuelta
-
-participantesLuegoDeUnaVuelta ::  Carrera -> Carrera
-participantesLuegoDeUnaVuelta = (participantesSufrirTrampa.participantesEnamoradesLuegoDeHacerTruco.participantesGastarCombustibleVuelta)
+darVuelta ::  Carrera -> Carrera
+darVuelta = (participantesSufrirTrampa.participantesEnamoradesLuegoDeHacerTruco.participantesGastarCombustibleVuelta)
 
 correrCarrera :: Carrera -> Carrera
-correrCarrera unaCarrera
-    | (vueltas unaCarrera) >= 1 = (correrCarrera.darVuelta) unaCarrera
-    | otherwise = id unaCarrera
-
-
+correrCarrera unaCarrera = (iterate darVuelta unaCarrera)!!(vueltas unaCarrera)
 
 --Funciones Auxiliares 3.3
 
 loVenSusEnamorades ::  Carrera -> Auto -> Auto
 loVenSusEnamorades unaCarrera unAuto
       |  puedeRealizarManiobraEnamorado unaCarrera unAuto = realizarTruco unAuto
-      |  otherwise = id unAuto
+      |  otherwise = unAuto
 
 enamoradeEstaEnElPublico ::  Carrera -> Auto -> Bool
 enamoradeEstaEnElPublico unaCarrera unAuto = any ( coincidenNombres (nombreDeEnamorado unAuto)) (nombresPublico unaCarrera)
@@ -121,9 +114,8 @@ elMasRapido auto1 auto2
 
 --3.5)
 
-elGranTruco :: [(Truco)] -> Auto -> Auto
-elGranTruco [] unAuto = unAuto
-elGranTruco (x:xs) unAuto = elGranTruco xs (x unAuto)
+elGranTruco :: Auto -> [Truco] -> Auto
+elGranTruco unAuto = foldl (flip ($)) unAuto
 
 --3.6)
 
@@ -147,14 +139,11 @@ realizarTruco unAuto = (trucoParticular unAuto) unAuto
 cambiarNaftaSegun :: (Auto -> Nafta) -> Auto -> Auto
 cambiarNaftaSegun criterio unAuto = cambiarNafta (criterio unAuto) unAuto
 
-restarVuelta :: Carrera ->  Carrera
-restarVuelta unaCarrera  = unaCarrera {vueltas = (vueltas unaCarrera) - 1}
-
 cambiarNafta :: Nafta -> Auto -> Auto
 cambiarNafta cantidadNafta unAuto = unAuto {nivelDeNafta = nivelDeNafta unAuto + cantidadNafta}
 
 calcularCombustibleVuelta :: Carrera -> Auto -> Nafta
-calcularCombustibleVuelta unaCarrera unAuto = (*(-1)) ((* (velocidad unAuto))((/10)(longitudPista unaCarrera)))
+calcularCombustibleVuelta unaCarrera unAuto = (velocidad unAuto / 10 * longitudPista unaCarrera)
 
 impresionar :: Truco
 impresionar  = incrementarVelocidadSegun velocidad
@@ -198,9 +187,6 @@ velocidadDeTurbo nDeVocales
 -- Punto 3 --
 tieneNafta :: Auto -> Bool
 tieneNafta = (>0).nivelDeNafta
-
-esNaftaMenorA :: Nafta ->  Auto -> Bool
-esNaftaMenorA unaNafta = (<unaNafta).nivelDeNafta
 
 velocidadEsMenorACien :: Auto -> Bool
 velocidadEsMenorACien = (<100).velocidad
