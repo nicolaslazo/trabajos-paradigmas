@@ -6,7 +6,7 @@ data Pais = Pais {
 	ingresoPerCapita 	:: Int,
 	poblacionSectorPublico 	:: Int,
 	poblacionSectorPrivado 	:: Int,
-	recursosNaturales 	:: [Recurso]
+	recursosNaturales 	:: [Recurso],
 	deuda 			:: Int
 } deriving (Show, Eq)
 
@@ -16,15 +16,15 @@ modificarDeuda :: Int -> Estrategia
 modificarDeuda valor pais = pais { deuda = deuda + valor }
 
 prestamo :: Int -> Estrategia
-prestamo nMillones = (modificarDeuda (millones*(1.5)))
+prestamo nMillones = (modificarDeuda (nMillones*(1.5)))
 
 --
 
 reducirIngreso :: Int -> Estrategia
-reducirIngreso porcentaje pais = pais { ingresoPerCapita = ingresoPerCapita - ingresoPorCapita * porcentaje / 100 }
+reducirIngreso porcentaje pais = pais { ingresoPerCapita = ingresoPerCapita - ingresoPerCapita * porcentaje / 100 }
 
 reducirIngresoPorPuestos :: Int -> Estrategia
-reducirIngresoPorPuestos puestos pais =
+reducirIngresoPorPuestos puestos pais 
     | puestos > 100 	= reducirIngreso 20 pais
     | otherwise		= reducirIngreso 15 pais
 
@@ -32,15 +32,18 @@ reducirActivosPublicos :: Int -> Estrategia
 reducirActivosPublicos activos pais = pais { poblacionSectorPublico = poblacionSectorPublico - activos }
 
 reducirPuestosPublicos :: Int -> Estrategia
-reducirPuestosPublicos puestos = ((reducirActivosPublicos puestos) . (reducirIngresoPorPuestos))
+reducirPuestosPublicos puestos = ((reducirActivosPublicos puestos) . (reducirIngresoPorPuestos puestos))
 
 --
 
 sacarRecurso :: Recurso -> [Recurso] -> [Recurso]
 sacarRecurso recurso = (filter (not.(==recurso)))
 
+modificarRecursos :: [Recurso] -> Estrategia
+modificarRecursos nuevosRecursos pais = pais { recursosNaturales = nuevosRecursos }
+
 modificarRecursosPorCriterio :: ([Recurso] -> [Recurso]) -> Estrategia
-modificarRecursosPorCriterio f pais = pais { recursosNaturales = f recursosNaturales }
+modificarRecursosPorCriterio f pais = modificarRecursos (f.recursosNaturales $ pais) pais
 
 explotarRecurso :: Recurso -> Estrategia
 explotarRecurso recurso = ((modificarDeuda (-2)) . (modificarRecursosPorCriterio (sacarRecurso recurso)))
@@ -60,11 +63,11 @@ namibia = Pais 4140 400000 650000 ["Mineria", "Ecoturismo"] 50
 --
 
 explotarMineria :: Receta
-explotarMineria = (modificarDeuda 200 . sacarRecursosPorCriterio (sacarRecurso "Mineria"))
+explotarMineria = (modificarDeuda 200 . modificarRecursosPorCriterio (sacarRecurso "Mineria"))
 
 --
 
-explotarMineria namibia
+--explotarMineria namibia
 
 --
 
