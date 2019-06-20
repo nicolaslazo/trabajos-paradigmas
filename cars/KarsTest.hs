@@ -96,7 +96,7 @@ main = hspec $ do
 
 		describe "Punto 3.5" $ do
 			it "La velocidad de rodra tras realizar elGranTruco con nitro, deReversa e impresionar es 130" $ do
-				(velocidad . elGranTruco [nitro, deReversa, impresionar]) rodra `shouldBe` 130
+				(velocidad . elGranTruco rodra) [nitro, deReversa, impresionar]  `shouldBe` 130
 
 			it "El nivelDeNafta de rodra tras realizar elGranTruco con nitro, deReversa e impresionar es 13" $ do
-				(nivelDeNafta. elGranTruco [nitro, deReversa, impresionar]) rodra `shouldBe` 13
+				(nivelDeNafta. elGranTruco rodra) [nitro, deReversa, impresionar]  `shouldBe` 13
