@@ -143,7 +143,7 @@ cambiarNafta :: Nafta -> Auto -> Auto
 cambiarNafta cantidadNafta unAuto = unAuto {nivelDeNafta = nivelDeNafta unAuto + cantidadNafta}
 
 calcularCombustibleVuelta :: Carrera -> Auto -> Nafta
-calcularCombustibleVuelta unaCarrera unAuto = (velocidad unAuto / 10 * longitudPista unaCarrera)
+calcularCombustibleVuelta unaCarrera unAuto = - (velocidad unAuto / 10 * longitudPista unaCarrera)
 
 impresionar :: Truco
 impresionar  = incrementarVelocidadSegun velocidad
