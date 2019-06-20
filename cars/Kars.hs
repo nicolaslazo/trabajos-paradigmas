@@ -23,7 +23,7 @@ data Auto = Auto {
 
 --3.0)
 deReversa :: Truco
-deReversa = cambiarNaftaSegun ((*0.2).nivelDeNafta) 
+deReversa = cambiarNaftaSegun ((*0.2).velocidad) 
 
 --3.1)
 
