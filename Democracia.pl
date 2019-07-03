@@ -149,4 +149,26 @@ leGanaA(CandidatoA, CandidatoB, Provincia) :-
 
 	sePostulanEn(Provincia, Partido).
 
+%%% PUNTO 4 %%%
 
+elGranCandidato(CandidatoA):-
+	esCandidato(CandidatoA, Partido),
+	candidatoMasJovenDelPartido(CandidatoA),
+	forall((sePostulanEn(Provincia, Partido),esCandidatoEnProvincia(CandidatoB, Provincia)),
+	 leGanaA(CandidatoA, CandidatoB , Provincia)).
+
+candidatoMasJovenDelPartido(CandidatoA):-
+	esCandidato(CandidatoA, Partido),	
+	forall(esCandidato(CandidatoB, Partido), tieneMenosEdad(CandidatoA, CandidatoB)).
+
+tieneMenosEdad(CandidatoA, CandidatoB):-
+	edad(CandidatoA, EdadA),
+	edad(CandidatoB, EdadB),
+	EdadA =< EdadB.
+
+%%%% Este lo hice por el caso de Seth en el partido amarillo que no tiene la edad en la base de conocimiento. %%%
+tieneMenosEdad(_, CandidatoB):-
+	esCandidato(CandidatoB, _),
+	not(edad(CandidatoB, _)).
+
+%%% Falta responder las preguntas.%%%
