@@ -172,3 +172,22 @@ tieneMenosEdad(_, CandidatoB):-
 	not(edad(CandidatoB, _)).
 
 %%% Falta responder las preguntas.%%%
+
+%%% PUNTO 5 %%%
+ajusteConsultora(Partido, Provincia, VerdaderoPorcentaje) :-
+	intencionDeVotoEn(Provincia, Partido, FalsoPorcentaje),
+	ganabaEnProvincia(Provincia, Partido),
+	VerdaderoPorcentaje is FalsoPorcentaje - 20.
+
+ajusteConsultora(Partido, Provincia, VerdaderoPorcentaje) :-
+	intencionDeVotoEn(Provincia, Partido, FalsoPorcentaje),
+	not(ganabaEnProvincia(Provincia, Partido)),
+	VerdaderoPorcentaje is FalsoPorcentaje + 5.
+
+ganabaEnProvincia(Provincia, Partido) :-
+	forall(sePostulanEn(Provincia, OtrosPartidos), 
+		partidoLeGanaAPartido(Partido, OtrosPartidos, Provincia)).
+
+partidoLeGanaAPartido(UnPartido, OtroPartido, Provincia) :-
+	esCandidato(Candidato, UnPartido),
+	forall(esCandidato(OtroCandidato, OtroPartido), leGanaA(Candidato, OtroCandidato, Provincia)).
