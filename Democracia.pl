@@ -106,6 +106,20 @@ intencionDeVotoEn(misiones, rojo, 90).
 intencionDeVotoEn(misiones, azul, 0).
 intencionDeVotoEn(misiones, amarillo, 0).
 
+% inflacion(cotaInferior, cotaSuperior)
+% construir(listaDeObras)
+% nuevosPuestosDeTrabajo(cantidad)
+
+% edilicio(hospital, 800)
+
+promete(azul,construir([edilicio(hospitales,1000),edilicio(jardines,100),edilicio(escuelas,5)])).
+promete(amarillo,construir([edilicio(hospitales,100),edilicio(universidad,1),edilicio(comisarias,200)])).
+promete(rojo,nuevosPuestosDeTrabajo(800000)).
+promete(amarillo,nuevosPuestosDeTrabajo(10000)).
+promete(azul,inflacion(2,4)).
+promete(amarillo,inflacion(1,15)).
+promete(rojo,inflacion(10,30)).
+
 %%% PUNTO 2 %%%
 esPicante(Provincia) :-
 	sePresentaMasDeUnPartido(Provincia),
@@ -129,9 +143,12 @@ leGanaA(CandidatoA, CandidatoB, Provincia) :-
 	esCandidatoEnProvincia(CandidatoA, Provincia),
 	not(esCandidatoEnProvincia(CandidatoB, Provincia)).
 
+sonCandidatosEnLaMismaProvincia(CandidatoA,CandidatoB):-
+	esCandidatoEnProvincia(CandidatoA,Provincia),
+	esCandidatoEnProvincia(CandidatoB,Provincia).
+
 leGanaA(CandidatoA, CandidatoB, Provincia) :-
-	esCandidatoEnProvincia(CandidatoA, Provincia),
-	esCandidatoEnProvincia(CandidatoB, Provincia),
+	sonCandidatosEnLaMismaProvincia(CandidatoA,CandidatoB),
 	
 	esCandidato(CandidatoA, PartidoA),
 	esCandidato(CandidatoB, PartidoB),
@@ -191,3 +208,7 @@ ganabaEnProvincia(Provincia, Partido) :-
 partidoLeGanaAPartido(UnPartido, OtroPartido, Provincia) :-
 	esCandidato(Candidato, UnPartido),
 	forall(esCandidato(OtroCandidato, OtroPartido), leGanaA(Candidato, OtroCandidato, Provincia)).
+
+%%% PUNTO 6 %%%
+
+%%% Agreguo a la base de conocimientos lo que te da en el enunciado %%%
