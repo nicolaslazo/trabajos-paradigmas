@@ -141,6 +141,7 @@ esCandidatoEnProvincia(Candidato, Provincia) :-
 
 leGanaA(CandidatoA, CandidatoB, Provincia) :-
 	esCandidatoEnProvincia(CandidatoA, Provincia),
+	esCandidato(CandidatoB, _),
 	not(esCandidatoEnProvincia(CandidatoB, Provincia)).
 
 sonCandidatosEnLaMismaProvincia(CandidatoA,CandidatoB):-
@@ -202,12 +203,25 @@ ajusteConsultora(Partido, Provincia, VerdaderoPorcentaje) :-
 	VerdaderoPorcentaje is FalsoPorcentaje + 5.
 
 ganabaEnProvincia(Provincia, Partido) :-
-	forall(sePostulanEn(Provincia, OtrosPartidos), 
+	intencionDeVotoEn(Provincia, Partido, _),
+	forall(intencionDeVotoEn(Provincia, OtrosPartidos, _), 
 		partidoLeGanaAPartido(Partido, OtrosPartidos, Provincia)).
 
 partidoLeGanaAPartido(UnPartido, OtroPartido, Provincia) :-
 	esCandidato(Candidato, UnPartido),
-	forall(esCandidato(OtroCandidato, OtroPartido), leGanaA(Candidato, OtroCandidato, Provincia)).
+	intencionDeVotoEn(Provincia, Partido, _),
+	intencionDeVotoEn(Provincia, Partido, _),
+	forall(esCandidato(OtroCandidato, OtroPartido), 
+		leGanaPorIntencionDeVotosA(Candidato, OtroCandidato, Provincia)).
+
+leGanaPorIntencionDeVotosA(Candidato, OtroCandidato, Provincia):-
+	esCandidato(Candidato, PartidoA),
+	esCandidato(OtroCandidato, PartidoB),
+
+	intencionDeVotoEn(Provincia, PartidoA, IntencionDeVotosA),
+	intencionDeVotoEn(Provincia, PartidoB, IntencionDeVotosB),
+
+	IntencionDeVotosA >= IntencionDeVotosB.
 
 %%% PUNTO 6 %%%
 
