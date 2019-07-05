@@ -141,7 +141,6 @@ esCandidatoEnProvincia(Candidato, Provincia) :-
 
 leGanaA(CandidatoA, CandidatoB, Provincia) :-
 	esCandidatoEnProvincia(CandidatoA, Provincia),
-	esCandidato(CandidatoB, _),
 	not(esCandidatoEnProvincia(CandidatoB, Provincia)).
 
 sonCandidatosEnLaMismaProvincia(CandidatoA,CandidatoB):-
