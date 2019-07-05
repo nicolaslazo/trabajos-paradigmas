@@ -112,8 +112,8 @@ intencionDeVotoEn(misiones, amarillo, 0).
 
 % edilicio(hospital, 800)
 
-promete(azul,construir([edilicio(hospitales,1000),edilicio(jardines,100),edilicio(escuelas,5)])).
-promete(amarillo,construir([edilicio(hospitales,100),edilicio(universidad,1),edilicio(comisarias,200)])).
+promete(azul,construir([edilicio(hospital,1000),edilicio(jardin,100),edilicio(escuela,5)])).
+promete(amarillo,construir([edilicio(hospital,100),edilicio(universidad,1),edilicio(comisaria,200)])).
 promete(rojo,nuevosPuestosDeTrabajo(800000)).
 promete(amarillo,nuevosPuestosDeTrabajo(10000)).
 promete(azul,inflacion(2,4)).
