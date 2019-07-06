@@ -235,6 +235,27 @@ influenciaDePromesas(nuevosPuestosDeTrabajo(Num), 3) :-
 influenciaDePromesas(nuevosPuestosDeTrabajo(Num), 0) :-
 	Num =< 50000.
 
+influenciaDePromesas(Edilicios, VariacionTotal) :-
+	forall(member(PosibleEdilicio, Edilicios),
+		esEdilicio(PosibleEdilicio)),
+	findall(Porcentaje,
+		(member(Edilicio, Edilicios), 
+			porcentajeDeEdilicio(Edilicio, Porcentaje)),
+		Porcentajes),
+	sumlist(Porcentajes, VariacionTotal).
+
+esEdilicio(edilicio(_, _)).
+
+porcentajeDeEdilicio(edilicio(hospital, _), 2).
+porcentajeDeEdilicio(edilicio(jardin, N), Porcentaje) :-
+	Porcentaje is (0.1) * N.
+porcentajeDeEdilicio(edilicio(escuela, N), Porcentaje) :-
+	Porcentaje is (0.1) * N.
+porcentajeDeEdilicio(edilicio(comisaria, 200), 2).
+porcentajeDeEdilicio(edilicio(comisaria, _), 0).
+porcentajeDeEdilicio(edilicio(universidad, _), 0).
+porcentajeDeEdilicio(edilicio(otro, _), -1).
+
 %%% PUNTO 8 %%%
 promedioDeCrecimiento(Partido, Promedio) :-
 	findall(Porcentaje, 
