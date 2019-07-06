@@ -212,7 +212,7 @@ ganabaEnProvincia(Provincia, Partido) :-
 
 partidoLeGanaAPartido(UnPartido, OtroPartido, Provincia) :-
 	esCandidato(Candidato, UnPartido),
-	intencionDeVotoEn(Provincia, Partido, _),
+	intencionDeVotoEn(Provincia, UnPartido, _),
 	forall(esCandidato(OtroCandidato, OtroPartido), 
 		leGanaPorIntencionDeVotosA(Candidato, OtroCandidato, Provincia)).
 
