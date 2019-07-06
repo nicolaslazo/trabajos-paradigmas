@@ -112,13 +112,17 @@ intencionDeVotoEn(misiones, amarillo, 0).
 
 % edilicio(hospital, 800)
 
-promete(azul,construir([edilicio(hospital,1000),edilicio(jardin,100),edilicio(escuela,5)])).
-promete(amarillo,construir([edilicio(hospital,100),edilicio(universidad,1),edilicio(comisaria,200)])).
-promete(rojo,nuevosPuestosDeTrabajo(800000)).
-promete(amarillo,nuevosPuestosDeTrabajo(10000)).
-promete(azul,inflacion(2,4)).
-promete(amarillo,inflacion(1,15)).
-promete(rojo,inflacion(10,30)).
+promete(azul, construir([edilicio(hospital, 1000),
+			edilicio(jardin, 100),
+			edilicio(escuela, 5)])).
+promete(amarillo, construir([edilicio(hospital, 100),
+			edilicio(universidad, 1),
+			edilicio(comisaria, 200)])).
+promete(rojo, nuevosPuestosDeTrabajo(800000)).
+promete(amarillo, nuevosPuestosDeTrabajo(10000)).
+promete(azul, inflacion(2,4)).
+promete(amarillo, inflacion(1,15)).
+promete(rojo, inflacion(10,30)).
 
 %%% PUNTO 2 %%%
 esPicante(Provincia) :-
@@ -143,10 +147,6 @@ leGanaA(CandidatoA, CandidatoB, Provincia) :-
 	esCandidatoEnProvincia(CandidatoA, Provincia),
 	not(esCandidatoEnProvincia(CandidatoB, Provincia)).
 
-sonCandidatosEnLaMismaProvincia(CandidatoA,CandidatoB):-
-	esCandidatoEnProvincia(CandidatoA,Provincia),
-	esCandidatoEnProvincia(CandidatoB,Provincia).
-
 leGanaA(CandidatoA, CandidatoB, Provincia) :-
 	sonCandidatosEnLaMismaProvincia(CandidatoA,CandidatoB),
 	
@@ -165,6 +165,10 @@ leGanaA(CandidatoA, CandidatoB, Provincia) :-
 	esCandidato(CandidatoB, Partido),
 
 	sePostulanEn(Provincia, Partido).
+
+sonCandidatosEnLaMismaProvincia(CandidatoA,CandidatoB):-
+	esCandidatoEnProvincia(CandidatoA,Provincia),
+	esCandidatoEnProvincia(CandidatoB,Provincia).
 
 %%% PUNTO 4 %%%
 
@@ -209,7 +213,6 @@ ganabaEnProvincia(Provincia, Partido) :-
 partidoLeGanaAPartido(UnPartido, OtroPartido, Provincia) :-
 	esCandidato(Candidato, UnPartido),
 	intencionDeVotoEn(Provincia, Partido, _),
-	intencionDeVotoEn(Provincia, Partido, _),
 	forall(esCandidato(OtroCandidato, OtroPartido), 
 		leGanaPorIntencionDeVotosA(Candidato, OtroCandidato, Provincia)).
 
@@ -222,6 +225,22 @@ leGanaPorIntencionDeVotosA(Candidato, OtroCandidato, Provincia):-
 
 	IntencionDeVotosA >= IntencionDeVotosB.
 
-%%% PUNTO 6 %%%
+%%% PUNTO 7 %%%
+influenciaDePromesas(inflacion(ValorInferior, ValorSuperior), Variacion) :-
+	Variacion is (-1) * (ValorInferior + ValorSuperior) / 2.
 
-%%% Agreguo a la base de conocimientos lo que te da en el enunciado %%%
+influenciaDePromesas(nuevosPuestosDeTrabajo(Num), 3) :-
+	Num > 50000.
+
+influenciaDePromesas(nuevosPuestosDeTrabajo(Num), 0) :-
+	Num =< 50000.
+
+%%% PUNTO 8 %%%
+promedioDeCrecimiento(Partido, Promedio) :-
+	findall(Porcentaje, 
+		(promete(Partido, Promesa),
+			influenciaDePromesas(Promesa, Porcentaje),
+		Porcentajes),
+	sumlist(Porcentajes, SumaPorcentajes),
+	length(Porcentajes, CantidadPorcentajes),
+	Promedio is SumaPorcentajes / CantidadPorcentajes.
