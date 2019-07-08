@@ -20,27 +20,27 @@ edad(linda, 30).
 edad(catherine, 59).
 edad(heather, 50).
 
-% sePostulanEn(Provincia, Partido)
-sePostulanEn(buenosAires, azul).
-sePostulanEn(chaco, azul).
-sePostulanEn(tierraDelFuego, azul).
-sePostulanEn(sanLuis, azul).
-sePostulanEn(neuquen, azul).
-sePostulanEn(buenosAires, rojo).
-sePostulanEn(santaFe, rojo).
-sePostulanEn(cordoba, rojo).
-sePostulanEn(chubut, rojo).
-sePostulanEn(tierraDelFuego, rojo).
-sePostulanEn(sanLuis, rojo).
-sePostulanEn(chaco, amarillo).
-sePostulanEn(formosa, amarillo).
-sePostulanEn(tucuman, amarillo).
-sePostulanEn(salta, amarillo).
-sePostulanEn(santaCruz, amarillo).
-sePostulanEn(laPampa, amarillo).
-sePostulanEn(corrientes, amarillo).
-sePostulanEn(misiones, amarillo).
-sePostulanEn(buenosAires, amarillo).
+% sePostulaEn(Provincia, Partido)
+sePostulaEn(buenosAires, azul).
+sePostulaEn(chaco, azul).
+sePostulaEn(tierraDelFuego, azul).
+sePostulaEn(sanLuis, azul).
+sePostulaEn(neuquen, azul).
+sePostulaEn(buenosAires, rojo).
+sePostulaEn(santaFe, rojo).
+sePostulaEn(cordoba, rojo).
+sePostulaEn(chubut, rojo).
+sePostulaEn(tierraDelFuego, rojo).
+sePostulaEn(sanLuis, rojo).
+sePostulaEn(chaco, amarillo).
+sePostulaEn(formosa, amarillo).
+sePostulaEn(tucuman, amarillo).
+sePostulaEn(salta, amarillo).
+sePostulaEn(santaCruz, amarillo).
+sePostulaEn(laPampa, amarillo).
+sePostulaEn(corrientes, amarillo).
+sePostulaEn(misiones, amarillo).
+sePostulaEn(buenosAires, amarillo).
 
 % poblacion(Provincia, NumeroDeHabitantes)
 poblacion(buenosAires, 15355000).
@@ -130,8 +130,8 @@ esPicante(Provincia) :-
 	masDeUnMillonDeHabitantes(Provincia).
 
 sePresentaMasDeUnPartido(Provincia) :-
-	sePostulanEn(Provincia, UnPartido),
-	sePostulanEn(Provincia, OtroPartido),
+	sePostulaEn(Provincia, UnPartido),
+	sePostulaEn(Provincia, OtroPartido),
 	UnPartido \= OtroPartido.
 
 masDeUnMillonDeHabitantes(Provincia) :-
@@ -141,41 +141,40 @@ masDeUnMillonDeHabitantes(Provincia) :-
 %%% PUNTO 3 %%%
 esCandidatoEnProvincia(Candidato, Provincia) :-
 	esCandidato(Candidato, Partido),
-	sePostulanEn(Provincia, Partido).
+	sePostulaEn(Provincia, Partido).
 
-leGanaA(CandidatoA, CandidatoB, Provincia) :-
-	esCandidatoEnProvincia(CandidatoA, Provincia),
-	not(esCandidatoEnProvincia(CandidatoB, Provincia)).
+leGanaA(CandidatoGanador, CandidatoPerdedor, Provincia) :-
+	esCandidatoEnProvincia(CandidatoGanador, Provincia),
+	not(esCandidatoEnProvincia(CandidatoPerdedor, Provincia)).
 
-leGanaA(CandidatoA, CandidatoB, Provincia) :-
-	sonCandidatosEnLaMismaProvincia(CandidatoA,CandidatoB),
-	
-	esCandidato(CandidatoA, PartidoA),
-	esCandidato(CandidatoB, PartidoB),
+leGanaA(CandidatoGanador, CandidatoPerdedor, Provincia) :-
+	sonCandidatosEnLaMismaProvincia(CandidatoGanador,CandidatoPerdedor),
+	candidatosDeDistintoPartido(CandidatoGanador, CandidatoPerdedor),
+	intencionDeVotoEn(Provincia, PartidoGanador, PorcentajeGanador),
+	intencionDeVotoEn(Provincia, PartidoPerdedor, PorcentajePerdedor),
+	PorcentajeGanador > PorcentajePerdedor.
 
-	PartidoA \= PartidoB,
+leGanaA(CandidatoGanador, CandidatoPerdedor, Provincia) :-
+	esCandidato(CandidatoGanador, Partido),
+	esCandidato(CandidatoPerdedor, Partido),
 
-	intencionDeVotoEn(Provincia, PartidoA, PorcentajeA),
-	intencionDeVotoEn(Provincia, PartidoB, PorcentajeB),
+	sePostulaEn(Provincia, Partido).
 
-	PorcentajeA > PorcentajeB.
+candidatosDeDistintoPartido(UnCandidato, OtroCandidato) :-
+	esCandidato(UnCandidato, UnPartido),
+	esCandidato(OtroCandidato, OtroPartido),
+	UnPartido \= OtroPartido.
 
-leGanaA(CandidatoA, CandidatoB, Provincia) :-
-	esCandidato(CandidatoA, Partido),
-	esCandidato(CandidatoB, Partido),
-
-	sePostulanEn(Provincia, Partido).
-
-sonCandidatosEnLaMismaProvincia(CandidatoA,CandidatoB):-
-	esCandidatoEnProvincia(CandidatoA,Provincia),
-	esCandidatoEnProvincia(CandidatoB,Provincia).
+sonCandidatosEnLaMismaProvincia(CandidatoGanador,CandidatoPerdedor):-
+	esCandidatoEnProvincia(CandidatoGanador,Provincia),
+	esCandidatoEnProvincia(CandidatoPerdedor,Provincia).
 
 %%% PUNTO 4 %%%
 
 elGranCandidato(CandidatoA):-
 	esCandidato(CandidatoA, Partido),
 	candidatoMasJovenDelPartido(CandidatoA),
-	forall((sePostulanEn(Provincia, Partido),esCandidatoEnProvincia(CandidatoB, Provincia)),
+	forall((sePostulaEn(Provincia, Partido),esCandidatoEnProvincia(CandidatoB, Provincia)),
 	 leGanaA(CandidatoA, CandidatoB , Provincia)).
 
 candidatoMasJovenDelPartido(CandidatoA):-
@@ -197,33 +196,30 @@ tieneMenosEdad(_, CandidatoB):-
 %%% PUNTO 5 %%%
 ajusteConsultora(Partido, Provincia, VerdaderoPorcentaje) :-
 	intencionDeVotoEn(Provincia, Partido, FalsoPorcentaje),
-	ganabaEnProvincia(Provincia, Partido),
-	VerdaderoPorcentaje is FalsoPorcentaje - 20.
+	valorCorrespondiente(Provincia, Partido, ValorCorrector),
+	VerdaderoPorcentaje is FalsoPorcentaje + ValorCorrector.
 
-ajusteConsultora(Partido, Provincia, VerdaderoPorcentaje) :-
-	intencionDeVotoEn(Provincia, Partido, FalsoPorcentaje),
-	not(ganabaEnProvincia(Provincia, Partido)),
-	VerdaderoPorcentaje is FalsoPorcentaje + 5.
+valorCorrespondiente(Provincia, Partido, (-20)) :-
+	ganabaEnProvincia(Provincia, Partido).
+
+valorCorrespondiente(Provincia, Partido, 5) :-
+	not(ganabaEnProvincia(Provincia, Partido).
+
+ganabaEnProvincia(Provincia, Partido) :-
+	intencionDeVotoEn(Provincia, Partido, _),
+	forall(intencionDeVotoEn(Provincia, OtrosPartidos, _), 
+		leGanaPorIntencionDeVotosA(Partido, OtrosPartidos, Provincia)).
+
+leGanaPorIntencionDeVotosA(UnPartido, OtroPartido, Provincia):-
+	intencionDeVotoEn(Provincia, UnPartido, IntencionDeVotosA),
+	intencionDeVotoEn(Provincia, OtroPartido, IntencionDeVotosB),
+
+	IntencionDeVotosA >= IntencionDeVotosB.
 
 ganabaEnProvincia(Provincia, Partido) :-
 	intencionDeVotoEn(Provincia, Partido, _),
 	forall(intencionDeVotoEn(Provincia, OtrosPartidos, _), 
 		partidoLeGanaAPartido(Partido, OtrosPartidos, Provincia)).
-
-partidoLeGanaAPartido(UnPartido, OtroPartido, Provincia) :-
-	esCandidato(Candidato, UnPartido),
-	intencionDeVotoEn(Provincia, UnPartido, _),
-	forall(esCandidato(OtroCandidato, OtroPartido), 
-		leGanaPorIntencionDeVotosA(Candidato, OtroCandidato, Provincia)).
-
-leGanaPorIntencionDeVotosA(Candidato, OtroCandidato, Provincia):-
-	esCandidato(Candidato, PartidoA),
-	esCandidato(OtroCandidato, PartidoB),
-
-	intencionDeVotoEn(Provincia, PartidoA, IntencionDeVotosA),
-	intencionDeVotoEn(Provincia, PartidoB, IntencionDeVotosB),
-
-	IntencionDeVotosA >= IntencionDeVotosB.
 
 %%% PUNTO 7 %%%
 influenciaDePromesas(inflacion(ValorInferior, ValorSuperior), Variacion) :-
@@ -258,10 +254,12 @@ porcentajeDeEdilicio(edilicio(otro, _), -1).
 
 %%% PUNTO 8 %%%
 promedioDeCrecimiento(Partido, Promedio) :-
+	partido(Partido),
 	findall(Porcentaje, 
 		(promete(Partido, Promesa),
 			influenciaDePromesas(Promesa, Porcentaje)),
 		Porcentajes),
-	sumlist(Porcentajes, SumaPorcentajes),
-	length(Porcentajes, CantidadPorcentajes),
-	Promedio is SumaPorcentajes / CantidadPorcentajes.
+	sumlist(Porcentajes, Promedio),
+
+partido(Partido) :-
+	sePostulaEn(_, Partido).
