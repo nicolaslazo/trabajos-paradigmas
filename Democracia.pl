@@ -260,7 +260,7 @@ porcentajeDeEdilicio(edilicio(otro, _), -1).
 promedioDeCrecimiento(Partido, Promedio) :-
 	findall(Porcentaje, 
 		(promete(Partido, Promesa),
-			influenciaDePromesas(Promesa, Porcentaje),
+			influenciaDePromesas(Promesa, Porcentaje)),
 		Porcentajes),
 	sumlist(Porcentajes, SumaPorcentajes),
 	length(Porcentajes, CantidadPorcentajes),
