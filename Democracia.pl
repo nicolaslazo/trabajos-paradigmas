@@ -236,21 +236,21 @@ influenciaDePromesas(Edilicios, VariacionTotal) :-
 		esEdilicio(PosibleEdilicio)),
 	findall(Porcentaje,
 		(member(Edilicio, Edilicios), 
-			porcentajeDeEdilicio(Edilicio, Porcentaje)),
+			porcentajeDeEdilicio(edilicio(Tipo, Cantidad), Porcentaje)),
 		Porcentajes),
 	sumlist(Porcentajes, VariacionTotal).
 
 esEdilicio(edilicio(_, _)).
 
-porcentajeDeEdilicio(edilicio(hospital, _), 2).
-porcentajeDeEdilicio(edilicio(jardin, N), Porcentaje) :-
+porcentajeDeEdilicio(hospital, _, 2).
+porcentajeDeEdilicio(jardin, N, Porcentaje) :-
 	Porcentaje is (0.1) * N.
-porcentajeDeEdilicio(edilicio(escuela, N), Porcentaje) :-
+porcentajeDeEdilicio(escuela, N, Porcentaje) :-
 	Porcentaje is (0.1) * N.
-porcentajeDeEdilicio(edilicio(comisaria, 200), 2).
-porcentajeDeEdilicio(edilicio(comisaria, _), 0).
-porcentajeDeEdilicio(edilicio(universidad, _), 0).
-porcentajeDeEdilicio(edilicio(otro, _), -1).
+porcentajeDeEdilicio(comisaria, 200, 2).
+porcentajeDeEdilicio(comisaria, _, 0).
+porcentajeDeEdilicio(universidad, _, 0).
+porcentajeDeEdilicio(otro, _, -1).
 
 %%% PUNTO 8 %%%
 promedioDeCrecimiento(Partido, Promedio) :-
