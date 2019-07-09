@@ -222,16 +222,20 @@ ganabaEnProvincia(Provincia, Partido) :-
 		partidoLeGanaAPartido(Partido, OtrosPartidos, Provincia)).
 
 %%% PUNTO 7 %%%
-influenciaDePromesas(inflacion(ValorInferior, ValorSuperior), Variacion) :-
-	Variacion is (-1) * (ValorInferior + ValorSuperior) / 2.
+influenciaDePromesas(Promesa, Variacion):-
+    promete(_, Promesa),
+    variacionSegunPromesa(Promesa, Variacion).
 
-influenciaDePromesas(nuevosPuestosDeTrabajo(Num), 3) :-
-	Num > 50000.
+variacionSegunPromesa(inflacion(ValorInferior,ValorSuperior)), Variacion):-
+    Variacion is (-1) * (ValorInferior + ValorSuperior) / 2.
 
-influenciaDePromesas(nuevosPuestosDeTrabajo(Num), 0) :-
-	Num =< 50000.
+variacionSegunPromesa(nuevosPuestosDeTrabajo(Num), 3):-
+    Num > 50000.
 
-influenciaDePromesas(Edilicios, VariacionTotal) :-
+variacionSegunPromesa(nuevosPuestosDeTrabajo(Num), 0):-
+    Num =< 50000.
+
+variacionSegunPromesa(construir(Edilicios), VariacionTotal) :-
 	forall(member(PosibleEdilicio, Edilicios),
 		esEdilicio(PosibleEdilicio)),
 	findall(Porcentaje,
