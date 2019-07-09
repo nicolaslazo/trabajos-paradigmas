@@ -239,8 +239,8 @@ variacionSegunPromesa(construir(Edilicios), VariacionTotal) :-
 	forall(member(PosibleEdilicio, Edilicios),
 		esEdilicio(PosibleEdilicio)),
 	findall(Porcentaje,
-		(member(Edilicio, Edilicios), 
-			porcentajeDeEdilicio(edilicio(Tipo, Cantidad), Porcentaje)),
+		(member(edilicio(Tipo,Cantidad), Edilicios), 
+			porcentajeDeEdilicio(Tipo, Cantidad, Porcentaje)),
 		Porcentajes),
 	sumlist(Porcentajes, VariacionTotal).
 
