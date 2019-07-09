@@ -236,15 +236,11 @@ variacionSegunPromesa(nuevosPuestosDeTrabajo(Num), 0):-
     Num =< 50000.
 
 variacionSegunPromesa(construir(Edilicios), VariacionTotal) :-
-	forall(member(PosibleEdilicio, Edilicios),
-		esEdilicio(PosibleEdilicio)),
 	findall(Porcentaje,
 		(member(edilicio(Tipo,Cantidad), Edilicios), 
 			porcentajeDeEdilicio(Tipo, Cantidad, Porcentaje)),
 		Porcentajes),
 	sumlist(Porcentajes, VariacionTotal).
-
-esEdilicio(edilicio(_, _)).
 
 porcentajeDeEdilicio(hospital, _, 2).
 porcentajeDeEdilicio(jardin, N, Porcentaje) :-
