@@ -191,7 +191,7 @@ tieneMenosEdad(_, CandidatoB):-
 	esCandidato(CandidatoB, _),
 	not(edad(CandidatoB, _)).
 
-%%% Falta responder las preguntas.%%%
+%Al realizar la consulta del tipo variable: elGranCandidato(Candidato), nos muestra que frank es el unico individuo que la hace verdadera.
 
 %%% PUNTO 5 %%%
 ajusteConsultora(Partido, Provincia, VerdaderoPorcentaje) :-
