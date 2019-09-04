@@ -1,0 +1,394 @@
+import alquimistas.*
+
+describe "Tests de alquimistas" {
+	test "Bomba de dano 200 es efectiva" {
+		var unaBomba = new Bomba(dano = 200, materiales = [])
+		
+		assert.that(unaBomba.esEfectivo())
+	}
+	
+	test "Alquimista con menos de la mitad de items de combate efectivos no tiene criterio" {
+		const alquimista = new Alquimista(
+			itemsDeCombate = [
+				new Pocion(
+        			podercurativo = 10,
+        			materiales = [
+                		new Material(
+                        	descripcion = "Agua sucia",
+                        	esMistico = false,
+                        	calidad = 10
+                		)
+        			]
+				),
+				new Debilitador(
+        			potencia = 0,
+        			materiales = [
+                		new Material(
+                        	descripcion = "Agua turbia",
+                        	esMistico = false,
+                        	calidad = 10
+                		)
+        			]
+				),
+				new Debilitador(
+        			potencia = 10,
+        			materiales = [
+                		new Material(
+                        	descripcion = "Agua mistica",
+                        	esMistico = true,
+                        	calidad = 10
+                		)
+        			]
+				)
+			]
+		)
+		
+		assert.notThat(alquimista.tieneCriterio())
+	}
+	
+	test "Alquimista con mas de la mitad de items de combate efectivos tiene criterio" {
+		const alquimista = new Alquimista(
+			itemsDeCombate = [
+				new Pocion(
+        			podercurativo = 9999,
+        			materiales = [
+                		new Material(
+                        	descripcion = "Plantas de Helix",
+                        	esMistico = true,
+                        	calidad = 2000
+                		)
+        			]
+				),
+				new Bomba(
+        			dano = 2000,
+        			materiales = [
+                		new Material(
+                        	descripcion = "Polvora magica",
+                        	esMistico = true,
+                        	calidad = 1000
+                		)
+        			]
+				),
+				new Debilitador(
+        			potencia = 20,
+        			materiales = [
+                		new Material(
+                        	descripcion = "Agua de zanja",
+                        	esMistico = false,
+                        	calidad = 10
+                		)
+        			]
+				)
+			]
+		)
+		
+		assert.that(alquimista.tieneCriterio())
+	}
+	
+	test "Alquimista con cuatro tipos distintos de items de recoleccion es buen explorador" {
+		const alquimista = new Alquimista(
+			itemsDeRecoleccion = [
+				new ItemDeRecoleccion(
+					descripcion = "red mistica",
+					materiales = [
+						new Material(
+							descripcion = "cuerda mistica",
+							esMistico = true,
+							calidad = 200
+						)
+					]
+				),
+				new ItemDeRecoleccion(
+					descripcion = "bolsa de dormir",
+					materiales = [
+						new Material(
+							descripcion = "plumas",
+							esMistico = false,
+							calidad = 200
+						)
+					]
+				),
+				new ItemDeRecoleccion(
+					descripcion = "caja",
+					materiales = [
+						new Material(
+							descripcion = "carton",
+							esMistico = false,
+							calidad = 200
+						)
+					]
+				),
+				new ItemDeRecoleccion(
+					descripcion = "brujula",
+					materiales = [
+						new Material(
+							descripcion = "iman",
+							esMistico = false,
+							calidad = 200
+						)
+					]
+				)
+			]
+		)
+		
+		assert.that(alquimista.esBuenExplorador())
+	}
+	
+	test "Alquimista con un tipo de item de recolección no es buen explorador" {
+		const alquimista = new Alquimista(
+			itemsDeRecoleccion = [
+				new ItemDeRecoleccion(
+					descripcion = "red mistica",
+					materiales = [
+						new Material(
+							descripcion = "cuerda mistica",
+							esMistico = true,
+							calidad = 200
+						)
+					]
+				)
+			]
+		)
+		
+		assert.notThat(alquimista.esBuenExplorador())
+	}
+	
+	test "Capacidad ofensiva de Juan es 310" {
+		const juan = new Alquimista(
+			itemsDeCombate = [
+				new Bomba(
+					dano = 200,
+					materiales = [
+						new Material(
+							descripcion = "polvora mistica",
+							esMistico = true,
+							calidad = 200
+						)
+					]
+				),
+				new Pocion(
+					podercurativo = 200,
+					materiales = [
+						new Material(
+							descripcion = "ambrosia",
+							esMistico = true,
+							calidad = 200
+						)
+					]
+				)
+			],
+			itemsDeRecoleccion = [
+				new ItemDeRecoleccion(
+					descripcion = "red mistica",
+					materiales = [
+						new Material(
+							descripcion = "cuerda mistica",
+							esMistico = true,
+							calidad = 200
+						)
+					]
+				)
+			]
+		)
+		
+		assert.equals(juan.capacidadOfensiva(), 310)
+	}
+	
+	test "Capacidad ofensiva de Sergio es 5" {
+		const sergio = new Alquimista(
+			itemsDeCombate = [
+				new Bomba(
+					dano = 10,
+					materiales = [
+						new Material(
+							descripcion = "tierra",
+							esMistico = false,
+							calidad = 10
+						)
+					]
+				)
+			]
+		)
+		
+		assert.equals(sergio.capacidadOfensiva(), 5)
+	}
+	
+	test "Capacidad ofensiva de Gaston es 24" {
+		const gaston = new Alquimista(
+			itemsDeCombate = [
+				new Debilitador(
+					potencia = 200,
+					materiales = [
+						new Material(
+							descripcion = "veneno",
+							esMistico = true,
+							calidad = 200
+						)
+					]
+				),
+				new Debilitador(
+					potencia = 200,
+					materiales = [
+						new Material(
+							descripcion = "veneno",
+							esMistico = true,
+							calidad = 200
+						)
+					]
+				)
+			],
+			itemsDeRecoleccion = [
+				new ItemDeRecoleccion(
+					descripcion = "bolsa de viento",
+					materiales = [
+						new Material(
+							descripcion = "viento",
+							esMistico = true,
+							calidad = 200
+						),
+						new Material(
+							descripcion = "bolsa",
+							esMistico = true,
+							calidad = 200
+						)
+					]
+				)
+			]
+		)
+		
+		assert.equals(gaston.capacidadOfensiva(), 24)
+	}
+	
+	test "Juan es profesional" {
+		const juan = new Alquimista(
+			itemsDeCombate = [
+				new Bomba(
+					dano = 200,
+					materiales = [
+						new Material(
+							descripcion = "polvo mistico",
+							esMistico = true,
+							calidad = 200
+						)
+					]
+				),
+				new Pocion(
+					podercurativo = 200,
+					materiales = [
+						new Material(
+							descripcion = "ambrosia",
+							esMistico = true,
+							calidad = 200
+						)
+					]
+				)
+			],
+			itemsDeRecoleccion = [
+				new ItemDeRecoleccion(
+					descripcion = "red mistica",
+					materiales = [
+						new Material(
+							descripcion = "cuerda mistica",
+							esMistico = true,
+							calidad = 200
+						)
+					]
+				)
+			]
+		)
+		
+		assert.that(juan.esProfesional())
+	}
+	
+	test "Sergio no es profesional" {
+		const sergio = new Alquimista(
+			itemsDeCombate = [
+				new Bomba(
+					dano = 10,
+					materiales = [
+						new Material(
+							descripcion = "polvora mala",
+							esMistico = false,
+							calidad = 10
+						)
+					]
+				),
+				new Pocion(
+					podercurativo = 20,
+					materiales = [
+						new Material(
+							descripcion = "jugo",
+							esMistico = false,
+							calidad = 20
+						)
+					]
+				)
+			],
+			itemsDeRecoleccion = [
+				new ItemDeRecoleccion(
+					descripcion = "red terrible",
+					materiales = [
+						new Material(
+							descripcion = "cuerda",
+							esMistico = false,
+							calidad = 20
+						)
+					]
+				)
+			]
+		)
+		
+		assert.notThat(sergio.esProfesional())
+	}
+	
+	test "Gaston es profesional" {
+		const gaston = new Alquimista(
+			itemsDeCombate = [
+				new Bomba(
+					dano = 200,
+					materiales = [
+						new Material(
+							descripcion = "polvora mistica",
+							esMistico = true,
+							calidad = 200
+						)
+					]
+				),
+				new Debilitador(
+					potencia = 200,
+					materiales = [
+						new Material(
+							descripcion = "jarabe",
+							esMistico = false,
+							calidad = 200
+						),
+						new Material(
+							descripcion = "esencia de lavanda",
+							esMistico = false,
+							calidad = 150
+						)
+					]
+				)
+			],
+			itemsDeRecoleccion = [
+				new ItemDeRecoleccion(
+					descripcion = "bolsa de viento",
+					materiales = [
+						new Material(
+							descripcion = "viento",
+							esMistico = true,
+							calidad = 200
+						),
+						new Material(
+							descripcion = "bolsa",
+							esMistico = true,
+							calidad = 200
+						)
+					]
+				)
+			]
+		)
+		
+		assert.that(gaston.esProfesional())
+	}
+}
